@@ -1,0 +1,45 @@
+.constructor {
+    display: flex;
+    flex-direction: column;
+}
+
+.constructor__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 60vh;
+}
+
+.constructor__list {
+    display: flex;
+    min-width: 100%;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+}
+
+.constructor__list-item {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.constructor__item {
+  width: 100%;
+}
+
+.constructor__price {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.constructor__price_item {
+    display: flex;
+}

@@ -1,0 +1,14 @@
+.ingeredients {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingeredients__tab {
+    display: flex;
+}
+
+.ingeredients__conteiner {
+    max-height: 65vh;
+    overflow: scroll;
+    overflow-x: hidden
+}
