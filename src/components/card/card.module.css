@@ -1,11 +1,10 @@
 .card {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .card__item {
     position: relative;
-    max-width: 250px;
     text-align: center;
     cursor: pointer;
 }
@@ -16,7 +15,6 @@
 
 .card__image {
     width: 100%;
-    max-width: 240px;
     object-fit: cover;
 
 }

@@ -5,6 +5,7 @@
 
 .ingeredients__tab {
     display: flex;
+    width: 100%;
 }
 
 .ingeredients__conteiner {
