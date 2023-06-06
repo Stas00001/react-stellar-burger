@@ -1,30 +1,34 @@
-import React from "react";
-import cardStyle from "./card.module.css";
+import React, { Children } from "react";
+import ingredientsCategoriesStyle from "./ingredients-categories.module.css";
 import PropTypes from "prop-types";
 import {
   Counter,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ingredientPropType } from "../../utils/prop-types";
-const Card = (props) => {
+const IngredientsCategories = (props) => {
   return (
-    <div className={`${cardStyle.card} pr-4 pl-4`}>
+    <>
+    <h3 ref={props.refBun} className="text text_type_main-medium pb-6">
+      {props.title}
+    </h3>
+    <div className={`${ingredientsCategoriesStyle.card} pr-4 pl-4`}>
       {props.data.map((item, index) => (
         <div
           onClick={(e) => props.onClickCard(e)}
           id={item._id}
-          className={`${cardStyle.card__item} pr-4 pl-4 pb-8`}
+          className={`${ingredientsCategoriesStyle.card__item} pr-4 pl-4 pb-8`}
           key={index}
           type={item.type}
         >
           <Counter count={1} size="default" extraClass="m-1" />
           <img
-            className={`${cardStyle.card__image} pb-1`}
+            className={`${ingredientsCategoriesStyle.card__image} pb-1`}
             src={item.image}
             alt={item.name}
           />
           <p
-            className={`${cardStyle.card__price} text text_type_digits-default pb-1`}
+            className={`${ingredientsCategoriesStyle.card__price} text text_type_digits-default pb-1`}
           >
             {" "}
             {item.price}{" "}
@@ -36,12 +40,13 @@ const Card = (props) => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 
-Card.propTypes = {
+IngredientsCategories.propTypes = {
   data: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
   onClickCard: PropTypes.func.isRequired
 };
 
-export default Card;
+export default IngredientsCategories;

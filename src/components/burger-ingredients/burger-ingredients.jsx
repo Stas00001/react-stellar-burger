@@ -1,7 +1,7 @@
 import React from "react";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import Card from "../card/card";
+import IngredientsCategories from "../ingredients-categories/ingredients-categories";
 import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 const BurgerIngredient = (props) => {
@@ -59,23 +59,27 @@ const BurgerIngredient = (props) => {
       <div
         className={`${burgerIngredientsStyle.ingredients__container} custom-scroll`}
       >
-        <h3 ref={refBun} className="text text_type_main-medium pb-6">
-          Булки
-        </h3>
-        <Card onClickCard={props.onClickCard} data={arrTypeBun} />
-        <h3 ref={refSauce} className="text text_type_main-medium pt-10 pb-6">
-          Соусы
-        </h3>
-        <Card
+       
+        <IngredientsCategories 
+        refBun ={refBun} 
+        title = 'Булки' 
+        onClickCard={props.onClickCard} 
+        data={arrTypeBun} />
+        
+        <IngredientsCategories
+          refBun ={refSauce} 
+          title = 'Соусы' 
           increment={props.increment}
           count={props.count}
           onClickCard={props.onClickCard}
           data={arrTypeSauce}
         />
-        <h3 ref={refMain} className="text text_type_main-medium pt-10 pb-6">
-          Начинки
-        </h3>
-        <Card onClickCard={props.onClickCard} data={arrTypeMain} />
+        <IngredientsCategories
+          refBun ={refMain} 
+          title = 'Начинки' 
+          onClickCard={props.onClickCard}
+          data={arrTypeMain} 
+          />
       </div>
     </div>
   );

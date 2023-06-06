@@ -8,7 +8,6 @@ import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
 import { getIngredients } from "../../utils/api";
 function App() {
-  const [card, setCard] = React.useState([]);
   const [modal, setModal] = React.useState(false);
   const [modalOrder, setModalOrder] = React.useState(false);
   const [modalIngredients, setModalIngredients] = React.useState({
@@ -44,7 +43,6 @@ function App() {
         ...ingredient,
       };
     }, {});
-    setCard([...card, ingredients]);
     handleOpenModalIngredient();
     setModalIngredients({
       ...modalIngredients,
