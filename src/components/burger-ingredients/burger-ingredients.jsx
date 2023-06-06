@@ -87,6 +87,7 @@ const BurgerIngredient = (props) => {
 
 BurgerIngredient.propTypes = {
   ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
+  onClickCard: PropTypes.func.isRequired
 };
 
 export default BurgerIngredient;
