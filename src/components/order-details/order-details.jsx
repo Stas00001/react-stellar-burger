@@ -2,6 +2,7 @@ import React from "react";
 import { orderDetailsPropType } from "../../utils/prop-types";
 import popupStyle from './order-details.module.css'
 import done from '../../images/done.svg'
+import PropTypes from "prop-types";
 
 const OrderDetails = (props) => {
     return (
@@ -15,7 +16,7 @@ const OrderDetails = (props) => {
     )
 }
 OrderDetails.propTypes = {
-    popupClose: orderDetailsPropType.isRequired
+    popupClose: PropTypes.func.isRequired
 }
 
 export default OrderDetails

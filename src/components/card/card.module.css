@@ -4,6 +4,7 @@
 }
 
 .card__item {
+    max-width: 300px;
     position: relative;
     text-align: center;
     cursor: pointer;

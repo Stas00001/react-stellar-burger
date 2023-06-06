@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import "./modal.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
-import { modalPropType } from "../../utils/prop-types";
+import PropTypes from "prop-types";
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = (props) => {
@@ -46,9 +46,9 @@ const Modal = (props) => {
 };
 
 Modal.propTypes = {
-    children: modalPropType.isRequired,
-    active: modalPropType.isRequired,
-    setActive: modalPropType.isRequired
+  children: PropTypes.node.isRequired,
+  active: PropTypes.bool.isRequired,
+  setActive: PropTypes.func.isRequired
 }
 
 
