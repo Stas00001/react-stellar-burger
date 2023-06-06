@@ -1,11 +1,11 @@
 import React from "react";
-import burgerIngeredienstStyle from "./burger-ingeredients.module.css";
+import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import Card from "../card/card";
 import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
-const BurgerIngeredienst = (props) => {
-  const data = props.ingeredienst;
+const BurgerIngredient = (props) => {
+  const data = props.ingredients;
   const arrTypeBun = data.filter((item) => item.type === "bun");
   const arrTypeMain = data.filter((item) => item.type === "main");
   const arrTypeSauce = data.filter((item) => item.type === "sauce");
@@ -22,9 +22,9 @@ const BurgerIngeredienst = (props) => {
     tabHandler(ref);
   };
   return (
-    <div className={`${burgerIngeredienstStyle.ingeredients} mt-10`}>
+    <div className={`${burgerIngredientsStyle.ingredients} mt-10`}>
       <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
-      <div className={`${burgerIngeredienstStyle.ingeredients__tab} pb-10`}>
+      <div className={`${burgerIngredientsStyle.ingredients__tab} pb-10`}>
         <Tab
           value="one"
           active={current === "one"}
@@ -57,7 +57,7 @@ const BurgerIngeredienst = (props) => {
         </Tab>
       </div>
       <div
-        className={`${burgerIngeredienstStyle.ingeredients__conteiner} custom-scroll`}
+        className={`${burgerIngredientsStyle.ingredients__container} custom-scroll`}
       >
         <h3 ref={refBun} className="text text_type_main-medium pb-6">
           Булки
@@ -81,8 +81,8 @@ const BurgerIngeredienst = (props) => {
   );
 };
 
-BurgerIngeredienst.propTypes = {
-  ingeredienst: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
+BurgerIngredient.propTypes = {
+  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
 };
 
-export default BurgerIngeredienst;
+export default BurgerIngredient;

@@ -1,18 +1,18 @@
 import styles from "./app.module.css";
 import React from "react";
 import Header from "../app-header/header";
-import BurgerIngeredienst from "../burger-ingredients/burger-ingredienst";
+import BurgerIngredient from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 import OrderDetails from "../order-details/order-details";
-import { getIngeredients } from "../api";
+import { getIngredients } from "../../utils/api";
 function App() {
   const [card, setCard] = React.useState([]);
   const [modal, setModal] = React.useState(false);
   const [modalOrder, setModalOrder] = React.useState(false);
-  const [modalIngeredient, setModalIngeredient] = React.useState({
-    ingeredients: null,
+  const [modalIngredients, setModalIngredients] = React.useState({
+    ingredients: null,
     successModal: false,
   });
   const [state, setState] = React.useState({
@@ -23,7 +23,7 @@ function App() {
   });
 
   React.useEffect(() => {
-    getIngeredients()
+    getIngredients()
       .then(setState({ ...state, hasError: false, isLoading: true }))
       .then((data) =>
         setState({ ...state, data, isLoading: false, success: true })
@@ -33,23 +33,23 @@ function App() {
       });
   }, []);
 
-  const handleOpenModalIngeredient = () => {
+  const handleOpenModalIngredient = () => {
     setModal(true);
   };
 
   const onClickCard = (e) => {
     const result = data.data.filter((item) => item._id === e.currentTarget.id);
-    const ingeredients = result.reduce((res, ingeredient) => {
+    const ingredients = result.reduce((res, ingredient) => {
       return {
-        ...ingeredient,
+        ...ingredient,
       };
     }, {});
-    setCard([...card, ingeredients]);
-    handleOpenModalIngeredient();
-    setModalIngeredient({
-      ...modalIngeredient,
+    setCard([...card, ingredients]);
+    handleOpenModalIngredient();
+    setModalIngredients({
+      ...modalIngredients,
       successModal: true,
-      ingeredients: ingeredients,
+      ingredients: ingredients,
     });
   };
 
@@ -62,7 +62,7 @@ function App() {
   };
 
   const { data, isLoading, hasError, success } = state;
-  const { successModal } = modalIngeredient;
+  const { successModal } = modalIngredients;
 
   return (
     <div className={styles.app}>
@@ -73,8 +73,8 @@ function App() {
           <Header />
           <main>
             <section className={styles.app__section_burger}>
-              <BurgerIngeredienst
-                ingeredienst={data.data}
+              <BurgerIngredient
+                ingredients={data.data}
                 onClickCard={onClickCard}
               />
               <BurgerConstructor
@@ -89,8 +89,8 @@ function App() {
       <Modal active={modal} setActive={setModal}>
         {successModal && (
           <IngredientDetails
-            data={modalIngeredient.ingeredients}
-          ></IngredientDetails>
+            data={modalIngredients.ingredients}
+          />
         )}
       </Modal>
 

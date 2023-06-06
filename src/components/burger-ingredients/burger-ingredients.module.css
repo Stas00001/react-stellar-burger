@@ -1,14 +1,14 @@
-.ingeredients {
+.ingredients {
     display: flex;
     flex-direction: column;
 }
 
-.ingeredients__tab {
+.ingredients__tab {
     display: flex;
     width: 100%;
 }
 
-.ingeredients__conteiner {
+.ingredients__container {
     max-height: 65vh;
     overflow: scroll;
     overflow-x: hidden

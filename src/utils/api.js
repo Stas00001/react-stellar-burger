@@ -1,13 +1,13 @@
 const configApi = {
     baseUrl: 'https://norma.nomoreparties.space/api/ingredients',
 }
-const getRespome = (res) => {
+const getResponse = (res) => {
     return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);  
 }
 
-const getIngeredients = () => { 
+const getIngredients = () => { 
     return fetch(`${configApi.baseUrl}`)
-    .then(getRespome)
+    .then(getResponse)
 }
 
-export {configApi, getIngeredients}
+export {configApi, getIngredients}

@@ -20,28 +20,3 @@
 .popup__button:hover {
     opacity: .3;
 }
-.checkmark {
-    display: inline-block;
-    width: 22px;
-    height: 22px;
-    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
-    transform: rotate(45deg);
-  }
-  
-  .checkmark_stem {
-    position: absolute;
-    width: 6px;
-    height: 60px;
-    background-color: white;
-    left: 18px;
-    top: -42px;
-  }
-  
-  .checkmark_kick {
-    position: absolute;
-    width: 34px;
-    height: 6px;
-    background-color: white;
-    left: -11px;
-    top: 12px;
-  }

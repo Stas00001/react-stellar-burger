@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import "./modal.css";
+import ModalOverlay from "../modal-overlay/modal-overlay";
+import { modalPropType } from "../../utils/prop-types";
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = (props) => {
@@ -20,10 +22,11 @@ const Modal = (props) => {
   };
 
   return ReactDOM.createPortal(
+    <>
     <div
       className={active ? "modal active" : "modal"}
-      onClick={() => setActive(false)}
     >
+      <ModalOverlay onClose ={() => setActive(false)} />
       <div
         className={active ? "modal__body active" : "modal__body"}
         onClick={(e) => e.stopPropagation()}
@@ -36,9 +39,18 @@ const Modal = (props) => {
         </button>
         {children}
       </div>
-    </div>,
+    </div>
+    </>,
     modalRoot
   );
 };
+
+Modal.propTypes = {
+    children: modalPropType.isRequired,
+    active: modalPropType.isRequired,
+    setActive: modalPropType.isRequired
+}
+
+
 
 export default Modal;

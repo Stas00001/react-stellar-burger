@@ -1,22 +1,21 @@
 import React from "react";
-import PropTypes from "prop-types";
 import popupStyle from "./ingredient-details.module.css";
 import { ingredientPropType } from "../../utils/prop-types";
 
 const IngredientDetails = (props) => {
-  const ingeredients = props.data;
+  const ingredients = props.data;
   return (
-    <div className={`${popupStyle.popup__ingeredient}`}>
+    <div className={`${popupStyle.popup__ingredient}`}>
       <p className={`text text_type_main-large`}>Детали ингредиента</p>
       <img
         className={`${popupStyle.popup__image} pb-4`}
-        src={ingeredients.image}
-        alt={ingeredients.name}
+        src={ingredients.image}
+        alt={ingredients.name}
       />
       <p
         className={`${popupStyle.popup__text} text text_type_main-medium mb-8`}
       >
-        {ingeredients.name}
+        {ingredients.name}
       </p>
       <ul className={`${popupStyle.popup__list} mb-15`}>
         <li>
@@ -28,7 +27,7 @@ const IngredientDetails = (props) => {
           <p
             className={`${popupStyle.popup__text} text text_type_digits-default text_color_inactive`}
           >
-            {ingeredients.calories}
+            {ingredients.calories}
           </p>
         </li>
         <li>
@@ -40,7 +39,7 @@ const IngredientDetails = (props) => {
           <p
             className={`${popupStyle.popup__text} text text_type_digits-default text_color_inactive`}
           >
-            {ingeredients.proteins}
+            {ingredients.proteins}
           </p>
         </li>
         <li>
@@ -52,7 +51,7 @@ const IngredientDetails = (props) => {
           <p
             className={`${popupStyle.popup__text} text text_type_digits-default text_color_inactive`}
           >
-            {ingeredients.fat}
+            {ingredients.fat}
           </p>
         </li>
         <li>
@@ -64,7 +63,7 @@ const IngredientDetails = (props) => {
           <p
             className={`${popupStyle.popup__text} text text_type_digits-default text_color_inactive`}
           >
-            {ingeredients.carbohydrates}
+            {ingredients.carbohydrates}
           </p>
         </li>
       </ul>

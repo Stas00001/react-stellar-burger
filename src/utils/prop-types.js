@@ -25,4 +25,13 @@ export const cardPropType = PropTypes.shape({
   __v:PropTypes.number.isRequired,
 });
 
+export const modalPropType = PropTypes.oneOfType([
+  PropTypes.node.isRequired,
+  PropTypes.bool.isRequired,
+  PropTypes.func.isRequired
+]);
+
 export const orderDetailsPropType = PropTypes.func;
+export const modalOverlayPropType = PropTypes.func;
+
+
