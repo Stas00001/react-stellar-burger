@@ -1,3 +1,21 @@
+:root {
+  --primary-light-color: #F2F2F3;
+  --second-color: #8585AD;
+}
+
 body {
   margin: 0;
+}
+
+.link {
+  color: inherit;
+  text-decoration: inherit; 
+}
+
+.link:hover {
+  color: var(--primary-light-color);
+}
+
+.link_state_active {
+  color: var(--primary-light-color);
 }

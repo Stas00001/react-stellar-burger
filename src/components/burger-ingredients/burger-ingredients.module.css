@@ -1,0 +1,15 @@
+.ingredients {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingredients__tab {
+    display: flex;
+    width: 100%;
+}
+
+.ingredients__container {
+    max-height: 65vh;
+    overflow: scroll;
+    overflow-x: hidden
+}

@@ -5,3 +5,11 @@
   background-color: #131316;
   color: #f2f2f3;
 }
+
+.app__section_burger {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 0 auto;
+  gap: 40px;
+  max-width: calc(100% - 10%);
+}
