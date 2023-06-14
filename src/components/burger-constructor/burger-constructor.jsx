@@ -1,6 +1,5 @@
 import React from "react";
 import BurgerConstructorStyle from "./burger-construtor.module.css";
-import PropTypes from "prop-types";
 import IngredientItem from "../ingredient-item/ingredient-item";
 import {
   ConstructorElement,
@@ -9,14 +8,53 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ingredientPropType } from "../../utils/prop-types";
+import { IngredientsContext, IngredientsItemContext, OrderContext, PriceContext } from "../../utils/use-context";
+import { postIngredients } from "../../utils/api";
+
+
 const BurgerConstructor = (props) => {
-  const data = props.array;
+  const [order, setOrder] = React.useContext(OrderContext)
+  const [priceState, priceDispatcher] = React.useContext(PriceContext)
+  const [state, setState] = React.useContext(IngredientsContext);
+  const [ingredientsItem, setIngredients] = React.useContext(IngredientsItemContext);
   const { bun, ingredients } = React.useMemo(() => {
     return {
-      bun: data.find((item) => item.type === "bun"),
-      ingredients: data.filter((item) => item.type !== "bun"),
+      bun: ingredientsItem.find((item) => item.type === "bun"),
+      ingredients: ingredientsItem.filter((item) => item.type !== "bun"),
     };
-  }, [data]);
+  }, [ingredientsItem]);
+
+  const orderIngredients = ingredients.map((item) => item._id) 
+  const orderArray = () => {
+    if(bun !==undefined) {     
+      orderIngredients.push(bun._id)
+    }
+  }
+
+  orderArray()
+
+  const price = () => {
+    const sum = priceState.price.reduce( (currentSum, currentNumber) => {
+      return currentSum + currentNumber 
+    }, 0)
+    return sum
+
+  }
+ const handleClick = () => {
+    props.onClick()
+    postIngredients({ingredients: orderIngredients})
+    .then((data) => {
+      setOrder(
+        data
+      )
+      console.log(order)
+    })
+    .catch((e)=> {
+      console.error(e)
+    })
+
+  }
+
 
   return (
     <div
@@ -47,14 +85,13 @@ const BurgerConstructor = (props) => {
         <p
           className={`${BurgerConstructorStyle.constructor__price_item} text text_type_digits-medium pr-10`}
         >
-          {" "}
-          600{" "}
+          {price()}
           <span className="pl-1">
             <CurrencyIcon type="primary" />
           </span>
         </p>
         <Button
-          onClick={props.onClick}
+          onClick={handleClick}
           htmlType="button"
           type="primary"
           size="large"
@@ -66,8 +103,6 @@ const BurgerConstructor = (props) => {
   );
 };
 
-BurgerConstructor.propTypes = {
-  array: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
-};
+
 
 export default BurgerConstructor;

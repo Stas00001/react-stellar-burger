@@ -4,8 +4,14 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsCategories from "../ingredients-categories/ingredients-categories";
 import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
-const BurgerIngredient = (props) => {
-  const data = props.ingredients;
+import { IngredientsContext, IngredientsItemContext, PriceContext } from "../../utils/use-context";
+const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) => {
+  const [state, setState] = React.useContext(IngredientsContext);
+
+  const [ingredients, setIngredients] = React.useContext(IngredientsItemContext)
+  const [priceState, priceDispatcher] = React.useContext(PriceContext)
+
+  const data = state.data.data;
   const arrTypeBun = data.filter((item) => item.type === "bun");
   const arrTypeMain = data.filter((item) => item.type === "main");
   const arrTypeSauce = data.filter((item) => item.type === "sauce");
@@ -13,6 +19,29 @@ const BurgerIngredient = (props) => {
   const refBun = React.useRef(null);
   const refSauce = React.useRef(null);
   const refMain = React.useRef(null);
+
+  const onClickCard = (e) => {
+    const result = data.filter((item) => item._id === e.currentTarget.id);
+    const ingredientsResult = result.reduce((res, ingredient) => {
+      if (ingredient.type === 'bun') {
+        priceDispatcher({type: 'bun', payload: ingredient.price})
+
+      } else {
+      priceDispatcher({type: 'ingredients', payload: ingredient.price})
+      } 
+      return{
+        ...ingredient
+      }
+    }, {});
+   
+    setIngredients([...ingredients, ingredientsResult])
+    // handleOpenModalIngredient();
+    // setModal({
+    //     ...modal,
+    //     successModal: true,
+    //     ingredient: ingredientsResult,
+    //   });
+  }
 
   const tabHandler = (ref) => {
     ref.current.scrollIntoView();
@@ -63,7 +92,7 @@ const BurgerIngredient = (props) => {
         <IngredientsCategories 
         refBun ={refBun} 
         title = 'Булки' 
-        onClickCard={props.onClickCard} 
+        onClickCard={onClickCard} 
         data={arrTypeBun} />
         
         <IngredientsCategories
@@ -71,23 +100,18 @@ const BurgerIngredient = (props) => {
           title = 'Соусы' 
           increment={props.increment}
           count={props.count}
-          onClickCard={props.onClickCard}
+          onClickCard={onClickCard}
           data={arrTypeSauce}
         />
         <IngredientsCategories
           refBun ={refMain} 
           title = 'Начинки' 
-          onClickCard={props.onClickCard}
+          onClickCard={onClickCard}
           data={arrTypeMain} 
           />
       </div>
     </div>
   );
-};
-
-BurgerIngredient.propTypes = {
-  ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
-  onClickCard: PropTypes.func.isRequired
 };
 
 export default BurgerIngredient;
