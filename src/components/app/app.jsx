@@ -3,23 +3,26 @@ import React from "react";
 import Header from "../app-header/header";
 import BurgerIngredient from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import OrderDetails from "../order-details/order-details";
 import { getIngredients } from "../../utils/api";
+import { IngredientsContext, SelectedIngredientsContext, OrderContext } from "../../services/use-context.js";
+
 function App() {
-  const [modal, setModal] = React.useState(false);
-  const [modalOrder, setModalOrder] = React.useState(false);
-  const [modalIngredients, setModalIngredients] = React.useState({
-    ingredients: null,
-    successModal: false,
-  });
+  
+  const [order, setOrder] = React.useState(null)
+ 
   const [state, setState] = React.useState({
     isLoading: false,
     hasError: false,
     success: false,
     data: [],
+    ingredients: null,
+    constructor: false,
+    constructorNull: true,
   });
+  const [selectedIngredients, setSelectedIngredients] = React.useState({
+    bun: null,
+    ingredients: []
+  })
 
   React.useEffect(() => {
     getIngredients()
@@ -32,69 +35,33 @@ function App() {
       });
   }, []);
 
-  const handleOpenModalIngredient = () => {
-    setModal(true);
-  };
+ 
 
-  const onClickCard = (e) => {
-    const result = data.data.filter((item) => item._id === e.currentTarget.id);
-    const ingredients = result.reduce((res, ingredient) => {
-      return {
-        ...ingredient,
-      };
-    }, {});
-    handleOpenModalIngredient();
-    setModalIngredients({
-      ...modalIngredients,
-      successModal: true,
-      ingredients: ingredients,
-    });
-  };
-
-  const handleOpenModalOrder = () => {
-    setModalOrder(true);
-  };
-
-  const handleCloseOrder = () => {
-    setModalOrder(false);
-  };
-
-  const { data, isLoading, hasError, success } = state;
-  const { successModal } = modalIngredients;
+  const { isLoading, hasError, success, constructor, constructorNull } = state;
 
   return (
+    
     <div className={styles.app}>
+      <OrderContext.Provider value={[order, setOrder]}>
       {isLoading && "Загрузка..."}
       {hasError && "Произошла ошибка"}
       {success && (
         <>
           <Header />
           <main>
-            <section className={styles.app__section_burger}>
-              <BurgerIngredient
-                ingredients={data.data}
-                onClickCard={onClickCard}
-              />
-              <BurgerConstructor
-                onClick={handleOpenModalOrder}
-                array={data.data}
-              />
+            <IngredientsContext.Provider value={[state, setState]}>
+              <SelectedIngredientsContext.Provider value={[selectedIngredients, setSelectedIngredients]} >
+              <section className={styles.app__section_burger}>
+              <BurgerIngredient/>
+             {constructorNull && (<div style={ {display: 'flex', justifyContent: 'center', alignItems: 'center'} }><p className="text text_type_main-medium"> {` <== конструктор пуст, выбирете ингредиенты`}</p></div>)} 
+             {constructor && (<BurgerConstructor/>)}
             </section>
+              </SelectedIngredientsContext.Provider>
+            </IngredientsContext.Provider>
           </main>
         </>
       )}
-
-      <Modal active={modal} setActive={setModal}>
-        {successModal && (
-          <IngredientDetails
-            data={modalIngredients.ingredients}
-          />
-        )}
-      </Modal>
-
-      <Modal active={modalOrder} setActive={setModalOrder}>
-        <OrderDetails popupClose={handleCloseOrder} />
-      </Modal>
+      </OrderContext.Provider>
     </div>
   );
 }

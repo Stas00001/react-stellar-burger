@@ -1,60 +1,128 @@
 import React from "react";
-import BurgerConstructorStyle from "./burger-construtor.module.css";
-import PropTypes from "prop-types";
-import IngredientItem from "../ingredient-item/ingredient-item";
+import BurgerConstructorStyle from "./burger-constructor.module.css";
+import IngredientList from "../ingredient-item/ingredient-list";
 import {
   ConstructorElement,
   Button,
-  DragIcon,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ingredientPropType } from "../../utils/prop-types";
-const BurgerConstructor = (props) => {
-  const data = props.array;
+import {
+  SelectedIngredientsContext,
+  OrderContext,
+} from "../../services/use-context";
+import { postIngredients } from "../../utils/api";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "ingredients":
+      return {
+        ...state,
+        price: [...state.price, action.payload],
+      };
+    case "bun":
+      return {
+        ...state,
+        price: [action.payload * 2],
+      };
+    default:
+      throw new Error(`Wrong type of action: ${action.type}`);
+  }
+}
+
+const BurgerConstructor = () => {
+  const initialState = { price: [] };
+  const [priceState, priceDispatcher] = React.useReducer(reducer, initialState);
+  const [order, setOrder] = React.useContext(OrderContext);
+  const [modalOrder, setModalOrder] = React.useState(false);
+  const [selectedIngredients] = React.useContext(
+    SelectedIngredientsContext
+  );
   const { bun, ingredients } = React.useMemo(() => {
+    if (selectedIngredients.bun) {
+      priceDispatcher({ type: "bun", payload: selectedIngredients.bun.price });
+    }
+    selectedIngredients.ingredients.reduce((res, ingredient) => {
+      priceDispatcher({ type: "ingredients", payload: ingredient.price });
+    }, {});
     return {
-      bun: data.find((item) => item.type === "bun"),
-      ingredients: data.filter((item) => item.type !== "bun"),
+      bun: selectedIngredients.bun,
+      ingredients: selectedIngredients.ingredients,
     };
-  }, [data]);
+  }, [selectedIngredients]);
+
+  const price = React.useMemo(() => {
+    const sum = priceState.price.reduce((currentSum, currentNumber) => {
+      return currentSum + currentNumber;
+    }, 0);
+    return sum;
+  }, [priceState]);
+  const handleOpenModalOrder = () => {
+    setModalOrder(true);
+  };
+
+  const handleCloseOrder = () => {
+    setModalOrder(false);
+  };
+
+  const handleClick = () => {
+    const orderIngredients = ingredients.map((item) => item._id);
+    if (bun !== undefined) {
+      orderIngredients.push(bun._id);
+    }
+    postIngredients({ ingredients: orderIngredients })
+      .then((data) => {
+        setOrder(data);
+      })
+      .then(() => {
+        handleOpenModalOrder();
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  };
 
   return (
     <div
       className={`${BurgerConstructorStyle.constructor} ml-4 mr-4 mb-10 mt-25`}
     >
-        {bun && <ConstructorElement
+      {bun && (
+        <ConstructorElement
           extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
           type="top"
           isLocked={true}
           price={bun.price}
           text={`${bun.name} (вверх)`}
           thumbnail={bun.image}
-        />}
+        />
+      )}
       <div
         className={`${BurgerConstructorStyle.constructor__container}  mt-3 mb-3 custom-scroll`}
       >
-        <IngredientItem  ingredients = {ingredients}/>
+        <IngredientList ingredients={ingredients} />
       </div>
-        {bun && <ConstructorElement
+      {bun && (
+        <ConstructorElement
           extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
           type="bottom"
           isLocked={true}
           price={bun.price}
           text={`${bun.name} (низ)`}
           thumbnail={bun.image}
-        />}
+        />
+      )}
       <div className={`${BurgerConstructorStyle.constructor__price} mt-10`}>
         <p
           className={`${BurgerConstructorStyle.constructor__price_item} text text_type_digits-medium pr-10`}
         >
-          {" "}
-          600{" "}
+          {price}
           <span className="pl-1">
             <CurrencyIcon type="primary" />
           </span>
         </p>
         <Button
-          onClick={props.onClick}
+          onClick={handleClick}
           htmlType="button"
           type="primary"
           size="large"
@@ -62,12 +130,12 @@ const BurgerConstructor = (props) => {
           Оформить заказ{" "}
         </Button>
       </div>
+
+      <Modal active={modalOrder} setActive={setModalOrder}>
+        <OrderDetails popupClose={handleCloseOrder} />
+      </Modal>
     </div>
   );
-};
-
-BurgerConstructor.propTypes = {
-  array: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
 };
 
 export default BurgerConstructor;
