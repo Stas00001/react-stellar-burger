@@ -1,4 +1,3 @@
-import React from "react";
 import popupStyle from "./ingredient-details.module.css";
 import { ingredientPropType } from "../../utils/prop-types";
 

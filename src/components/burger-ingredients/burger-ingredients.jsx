@@ -2,9 +2,7 @@ import React from "react";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsCategories from "../ingredients-categories/ingredients-categories";
-import PropTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types";
-import { IngredientsContext, SelectedIngredientsContext, PriceContext } from "../../services/use-context";
+import { IngredientsContext, SelectedIngredientsContext } from "../../services/use-context";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
 const BurgerIngredient = (props) => {
@@ -46,8 +44,6 @@ const BurgerIngredient = (props) => {
         ...ingredient
       }
     }, {});
-    console.log(selectedIngredients)
-
     // setSelectedIngredients([...selectedIngredients, ingredientsResult])
     // handleOpenModalIngredient();
     setModalIngredients({
@@ -56,9 +52,9 @@ const BurgerIngredient = (props) => {
         ingredient: ingredientsResult,
       });
   }
-  const handleOpenModalIngredient = () => {
-    setModal(true);
-  };
+  // const handleOpenModalIngredient = () => {
+  //   setModal(true);
+  // };
   const tabHandler = (ref) => {
     ref.current.scrollIntoView();
   };

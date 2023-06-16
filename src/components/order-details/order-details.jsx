@@ -1,12 +1,11 @@
 import React from "react";
-import { orderDetailsPropType } from "../../utils/prop-types";
 import popupStyle from './order-details.module.css'
 import done from '../../images/done.svg'
 import PropTypes from "prop-types";
 import { OrderContext } from "../../services/use-context";
 
 const OrderDetails = (props) => {
-    const [order, setOrder] = React.useContext(OrderContext)
+    const [order] = React.useContext(OrderContext)
     return (
         <div className={`${popupStyle.popup} pb-30 pt-30`}>
             {order && (

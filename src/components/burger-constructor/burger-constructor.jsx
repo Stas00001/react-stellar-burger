@@ -1,6 +1,6 @@
 import React from "react";
-import BurgerConstructorStyle from "./burger-construtor.module.css";
-import IngredientItem from "../ingredient-item/ingredient-item";
+import BurgerConstructorStyle from "./burger-constructor.module.css";
+import IngredientList from "../ingredient-item/ingredient-list";
 import {
   ConstructorElement,
   Button,
@@ -36,7 +36,7 @@ const BurgerConstructor = () => {
   const [priceState, priceDispatcher] = React.useReducer(reducer, initialState);
   const [order, setOrder] = React.useContext(OrderContext);
   const [modalOrder, setModalOrder] = React.useState(false);
-  const [selectedIngredients, setSelectedIngredients] = React.useContext(
+  const [selectedIngredients] = React.useContext(
     SelectedIngredientsContext
   );
   const { typeBun, typeIngredients } = React.useMemo(() => {
@@ -100,7 +100,7 @@ const BurgerConstructor = () => {
       <div
         className={`${BurgerConstructorStyle.constructor__container}  mt-3 mb-3 custom-scroll`}
       >
-        <IngredientItem ingredients={typeIngredients} />
+        <IngredientList ingredients={typeIngredients} />
       </div>
       {typeBun && (
         <ConstructorElement

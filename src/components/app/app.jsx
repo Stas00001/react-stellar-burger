@@ -37,7 +37,6 @@ function App() {
 
  
 
-  const {bun, ingredients} = selectedIngredients
   const { isLoading, hasError, success, constructor, constructorNull } = state;
 
   return (
