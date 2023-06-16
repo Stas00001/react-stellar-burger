@@ -1,5 +1,7 @@
 import React from "react";
 import style from './ingredient-item.module.css'
+import PropTypes from "prop-types";
+import { ingredientPropType } from "../../utils/prop-types";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 const IngredientItem = (props) => {
     const {ingredients} = props
@@ -27,5 +29,9 @@ const IngredientItem = (props) => {
         </ul>
     );
   }
+
+  IngredientItem.propTypes = {
+    ingredients: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
+  };
 
   export default IngredientItem

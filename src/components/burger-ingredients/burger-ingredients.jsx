@@ -4,18 +4,30 @@ import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsCategories from "../ingredients-categories/ingredients-categories";
 import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
-import { IngredientsContext, IngredientsItemContext, PriceContext } from "../../utils/use-context";
-const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) => {
+import { IngredientsContext, SelectedIngredientsContext, PriceContext } from "../../services/use-context";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+const BurgerIngredient = (props) => {
   const [state, setState] = React.useContext(IngredientsContext);
-
-  const [ingredients, setIngredients] = React.useContext(IngredientsItemContext)
-  const [priceState, priceDispatcher] = React.useContext(PriceContext)
+  const [selectedIngredients, setSelectedIngredients] = React.useContext(SelectedIngredientsContext)
+  const [modal, setModal] = React.useState(false);
+  const [current, setCurrent] = React.useState("one");
+  const [modalIngredients, setModalIngredients] = React.useState({
+    ingredient: null,
+    bun: null,
+    successModal: false,
+  });
 
   const data = state.data.data;
-  const arrTypeBun = data.filter((item) => item.type === "bun");
-  const arrTypeMain = data.filter((item) => item.type === "main");
-  const arrTypeSauce = data.filter((item) => item.type === "sauce");
-  const [current, setCurrent] = React.useState("one");
+  const {arrTypeBun, arrTypeMain, arrTypeSauce } = React.useMemo(() => {
+    return {
+     arrTypeBun: data.filter((item) => item.type === "bun"),
+     arrTypeMain: data.filter((item) => item.type === "main"),
+     arrTypeSauce: data.filter((item) => item.type === "sauce"),
+    }
+  }, [data])
+  
+ 
   const refBun = React.useRef(null);
   const refSauce = React.useRef(null);
   const refMain = React.useRef(null);
@@ -24,25 +36,29 @@ const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) =
     const result = data.filter((item) => item._id === e.currentTarget.id);
     const ingredientsResult = result.reduce((res, ingredient) => {
       if (ingredient.type === 'bun') {
-        priceDispatcher({type: 'bun', payload: ingredient.price})
-
+        setSelectedIngredients({...selectedIngredients, bun: ingredient})
+        setState({...state, constructor: true, constructorNull: false,})
       } else {
-      priceDispatcher({type: 'ingredients', payload: ingredient.price})
-      } 
+        setSelectedIngredients({...selectedIngredients, ingredients: [...selectedIngredients.ingredients, ingredient ]})
+        setState({...state, constructor: true, constructorNull: false,})
+      }
       return{
         ...ingredient
       }
     }, {});
-   
-    setIngredients([...ingredients, ingredientsResult])
-    // handleOpenModalIngredient();
-    // setModal({
-    //     ...modal,
-    //     successModal: true,
-    //     ingredient: ingredientsResult,
-    //   });
-  }
+    console.log(selectedIngredients)
 
+    // setSelectedIngredients([...selectedIngredients, ingredientsResult])
+    // handleOpenModalIngredient();
+    setModalIngredients({
+        ...modal,
+        successModal: true,
+        ingredient: ingredientsResult,
+      });
+  }
+  const handleOpenModalIngredient = () => {
+    setModal(true);
+  };
   const tabHandler = (ref) => {
     ref.current.scrollIntoView();
   };
@@ -50,6 +66,9 @@ const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) =
   const handleClick = (ref) => {
     tabHandler(ref);
   };
+
+  const { successModal } = modalIngredients;
+
   return (
     <div className={`${burgerIngredientsStyle.ingredients} mt-10`}>
       <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
@@ -98,8 +117,6 @@ const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) =
         <IngredientsCategories
           refBun ={refSauce} 
           title = 'Соусы' 
-          increment={props.increment}
-          count={props.count}
           onClickCard={onClickCard}
           data={arrTypeSauce}
         />
@@ -110,6 +127,13 @@ const BurgerIngredient = ({modal, setModal, handleOpenModalIngredient} ,props) =
           data={arrTypeMain} 
           />
       </div>
+      <Modal active={modal} setActive={setModal}>
+        {successModal && (
+          <IngredientDetails
+            data={modalIngredients.ingredient}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

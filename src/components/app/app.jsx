@@ -3,30 +3,26 @@ import React from "react";
 import Header from "../app-header/header";
 import BurgerIngredient from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
-import OrderDetails from "../order-details/order-details";
 import { getIngredients } from "../../utils/api";
-import { IngredientsContext, IngredientsItemContext, PriceContext, OrderContext } from "../../utils/use-context.js";
+import { IngredientsContext, SelectedIngredientsContext, OrderContext } from "../../services/use-context.js";
 
 function App() {
-  const initialState = { price: [] };
-  const [priceState, priceDispatcher] = React.useReducer(reducer, initialState)
-  const [modal, setModal] = React.useState(false);
-  const [modalOrder, setModalOrder] = React.useState(false);
+  
   const [order, setOrder] = React.useState(null)
-  const [modalIngredients, setModalIngredients] = React.useState({
-    ingredient: null,
-    successModal: false,
-  });
+ 
   const [state, setState] = React.useState({
     isLoading: false,
     hasError: false,
     success: false,
     data: [],
     ingredients: null,
+    constructor: false,
+    constructorNull: true,
   });
-  const [ingredients, setIngredients] = React.useState([])
+  const [selectedIngredients, setSelectedIngredients] = React.useState({
+    bun: null,
+    ingredients: []
+  })
 
   React.useEffect(() => {
     getIngredients()
@@ -39,50 +35,10 @@ function App() {
       });
   }, []);
 
-  function reducer(state , action) {
-    switch (action.type) {
-      case "ingredients":
-        return {
-          ...state,
-           price: [...state.price, action.payload] };
-      case "bun":
-        return { 
-          ...state,
-          price: [action.payload * 2] };
-      default:
-        throw new Error(`Wrong type of action: ${action.type}`);
-    }
-  }
-  const handleOpenModalIngredient = () => {
-    setModal(true);
-  };
+ 
 
-  // const onClickCard = (e) => {
-  //   const result = data.data.filter((item) => item._id === e.currentTarget.id);
-  //   const ingredient = result.reduce((res, ingredient) => {
-  //     return {
-  //       ...ingredient,
-  //     };
-  //   }, {});
-  //   handleOpenModalIngredient();
-  //   setModalIngredients({
-  //     ...modalIngredients,
-  //     successModal: true,
-  //     ingredient: ingredient,
-  //   });
-  // };
-
-  const handleOpenModalOrder = (e) => {
-
-    setModalOrder(true);
-  };
-
-  const handleCloseOrder = () => {
-    setModalOrder(false);
-  };
-
-  const { isLoading, hasError, success } = state;
-  const { successModal } = modalIngredients;
+  const {bun, ingredients} = selectedIngredients
+  const { isLoading, hasError, success, constructor, constructorNull } = state;
 
   return (
     
@@ -95,31 +51,17 @@ function App() {
           <Header />
           <main>
             <IngredientsContext.Provider value={[state, setState]}>
-              <IngredientsItemContext.Provider value={[ingredients, setIngredients]} >
-                <PriceContext.Provider value={[priceState, priceDispatcher]}>
+              <SelectedIngredientsContext.Provider value={[selectedIngredients, setSelectedIngredients]} >
               <section className={styles.app__section_burger}>
-              <BurgerIngredient handleOpenModalIngredient ={handleOpenModalIngredient} modal = {modalIngredients} setModal={setModalIngredients}/>
-              <BurgerConstructor
-                onClick={handleOpenModalOrder}
-              />
+              <BurgerIngredient/>
+             {constructorNull && (<div style={ {display: 'flex', justifyContent: 'center', alignItems: 'center'} }><p className="text text_type_main-medium"> {` <== конструктор пуст, выбирете ингредиенты`}</p></div>)} 
+             {constructor && (<BurgerConstructor/>)}
             </section>
-                </PriceContext.Provider>
-              </IngredientsItemContext.Provider>
+              </SelectedIngredientsContext.Provider>
             </IngredientsContext.Provider>
           </main>
         </>
       )}
-
-      <Modal active={modal} setActive={setModal}>
-        {successModal && (
-          <IngredientDetails
-            data={modalIngredients.ingredient}
-          />
-        )}
-      </Modal>
-      <Modal active={modalOrder} setActive={setModalOrder}>
-        <OrderDetails popupClose={handleCloseOrder} />
-      </Modal>
       </OrderContext.Provider>
     </div>
   );
