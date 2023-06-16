@@ -39,7 +39,7 @@ const BurgerConstructor = () => {
   const [selectedIngredients] = React.useContext(
     SelectedIngredientsContext
   );
-  const { typeBun, typeIngredients } = React.useMemo(() => {
+  const { bun, ingredients } = React.useMemo(() => {
     if (selectedIngredients.bun) {
       priceDispatcher({ type: "bun", payload: selectedIngredients.bun.price });
     }
@@ -47,8 +47,8 @@ const BurgerConstructor = () => {
       priceDispatcher({ type: "ingredients", payload: ingredient.price });
     }, {});
     return {
-      typeBun: selectedIngredients.bun,
-      typeIngredients: selectedIngredients.ingredients,
+      bun: selectedIngredients.bun,
+      ingredients: selectedIngredients.ingredients,
     };
   }, [selectedIngredients]);
 
@@ -67,9 +67,9 @@ const BurgerConstructor = () => {
   };
 
   const handleClick = () => {
-    const orderIngredients = typeIngredients.map((item) => item._id);
-    if (typeBun !== undefined) {
-      orderIngredients.push(typeBun._id);
+    const orderIngredients = ingredients.map((item) => item._id);
+    if (bun !== undefined) {
+      orderIngredients.push(bun._id);
     }
     postIngredients({ ingredients: orderIngredients })
       .then((data) => {
@@ -87,29 +87,29 @@ const BurgerConstructor = () => {
     <div
       className={`${BurgerConstructorStyle.constructor} ml-4 mr-4 mb-10 mt-25`}
     >
-      {typeBun && (
+      {bun && (
         <ConstructorElement
           extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
           type="top"
           isLocked={true}
-          price={typeBun.price}
-          text={`${typeBun.name} (вверх)`}
-          thumbnail={typeBun.image}
+          price={bun.price}
+          text={`${bun.name} (вверх)`}
+          thumbnail={bun.image}
         />
       )}
       <div
         className={`${BurgerConstructorStyle.constructor__container}  mt-3 mb-3 custom-scroll`}
       >
-        <IngredientList ingredients={typeIngredients} />
+        <IngredientList ingredients={ingredients} />
       </div>
-      {typeBun && (
+      {bun && (
         <ConstructorElement
           extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
           type="bottom"
           isLocked={true}
-          price={typeBun.price}
-          text={`${typeBun.name} (низ)`}
-          thumbnail={typeBun.image}
+          price={bun.price}
+          text={`${bun.name} (низ)`}
+          thumbnail={bun.image}
         />
       )}
       <div className={`${BurgerConstructorStyle.constructor__price} mt-10`}>
