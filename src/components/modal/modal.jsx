@@ -4,35 +4,48 @@ import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import "./modal.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { CLEAR_INGREDIENT } from "../../services/actions/ingredients-details";
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = (props) => {
   const { children, active, setActive } = props;
+
+  const dispatch = useDispatch()
+
   React.useEffect(() => {
     document.addEventListener("keydown", closePopupEsc);
-
+   
     return () => document.removeEventListener("keydown", closePopupEsc);
   }, []);
 
   const closePopupEsc = (evt) => {
     if (evt.key === "Escape") {
       evt.preventDefault();
-      setActive(false);
+      close()
     }
   };
-
+const close = () => {
+  setActive(false);
+  setTimeout(() => {
+    dispatch({
+      type: CLEAR_INGREDIENT
+    })
+  }, 300)
+  
+}
   return ReactDOM.createPortal(
     <>
     <div
       className={active ? "modal active" : "modal"}
     >
-      <ModalOverlay onClose ={() => setActive(false)} />
+      <ModalOverlay onClose ={close} />
       <div
         className={active ? "modal__body active" : "modal__body"}
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => setActive(false)}
+          onClick={close}
           className={"modal__button-close"}
         >
           <CloseIcon type="primary" />

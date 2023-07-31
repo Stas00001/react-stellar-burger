@@ -12,7 +12,25 @@ body {
   text-decoration: inherit; 
 }
 
+.link-error:hover {
+  color: var(--second-color);
+  ;
+}
 
-.link_state_active {
+.link_active {
   color: var(--primary-light-color);
+}
+
+.border {
+  border: 1px solid rgb(7, 121, 51);
+  box-shadow: 0px 0px 10px 0px rgba(7, 159, 70, 0.7);
+
+}
+
+.shadow {
+  box-shadow: 0px 0px 10px 0px rgba(76, 76, 255, 0.7);
+}
+
+.is-drag {
+  background-color: #8585AD;
 }

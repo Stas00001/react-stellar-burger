@@ -1,91 +1,133 @@
-import React from "react";
+import React, { useMemo } from "react";
 import BurgerConstructorStyle from "./burger-constructor.module.css";
-import IngredientList from "../ingredient-item/ingredient-list";
+import IngredientList from "../ingredient-list/ingredient-list";
 import {
   ConstructorElement,
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import {
-  SelectedIngredientsContext,
-  OrderContext,
-} from "../../services/use-context";
-import { postIngredients } from "../../utils/api";
 import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "ingredients":
-      return {
-        ...state,
-        price: [...state.price, action.payload],
-      };
-    case "bun":
-      return {
-        ...state,
-        price: [action.payload * 2],
-      };
-    default:
-      throw new Error(`Wrong type of action: ${action.type}`);
-  }
-}
+import { useDispatch } from "react-redux";
+import {
+  ADD_INGREDIENTS,
+  ADD_BUN,
+  DECREASE_BUN,
+  INCREASE_ITEM,
+  INCREASE_BUN,
+  CLEAR_CONSTRUCTOR,
+} from "../../services/actions/ingredients";
+import { postOrder } from "../../services/actions/order";
+import { useDrop } from "react-dnd";
+import { useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BurgerConstructor = () => {
-  const initialState = { price: [] };
-  const [priceState, priceDispatcher] = React.useReducer(reducer, initialState);
-  const [order, setOrder] = React.useContext(OrderContext);
+  const dispatch = useDispatch();
+  const { items, ingredients, bun } = useSelector((store) => store.ingredients);
   const [modalOrder, setModalOrder] = React.useState(false);
-  const [selectedIngredients] = React.useContext(
-    SelectedIngredientsContext
-  );
-  const { bun, ingredients } = React.useMemo(() => {
-    if (selectedIngredients.bun) {
-      priceDispatcher({ type: "bun", payload: selectedIngredients.bun.price });
-    }
-    selectedIngredients.ingredients.reduce((res, ingredient) => {
-      priceDispatcher({ type: "ingredients", payload: ingredient.price });
+  const totalPrice = useMemo(() => {
+    return items.reduce((acc, item) => acc + item.price * item.__v, 0);
+  }, [items]);
+  const addItem = (itemId) => {
+    const result = items.filter((item) => item._id === itemId._id);
+    const ingredientsResult = result.reduce((res, ingredient) => {
+      if (ingredient.type === "bun") {
+        dispatch({
+          type: ADD_BUN,
+          ingredient,
+        });
+      } else {
+        const item = {
+          ...ingredient,
+          key: uuidv4(),
+        };
+        dispatch({
+          type: ADD_INGREDIENTS,
+          item,
+        });
+      }
+      return {
+        ...ingredient,
+      };
     }, {});
-    return {
-      bun: selectedIngredients.bun,
-      ingredients: selectedIngredients.ingredients,
-    };
-  }, [selectedIngredients]);
+  };
 
-  const price = React.useMemo(() => {
-    const sum = priceState.price.reduce((currentSum, currentNumber) => {
-      return currentSum + currentNumber;
-    }, 0);
-    return sum;
-  }, [priceState]);
+  const decrease = () => {
+    dispatch({
+      type: DECREASE_BUN,
+    });
+  };
+
+  const increase = (itemId) => {
+    items
+      .filter((item) => item._id === itemId._id)
+      .reduce((res, item) => {
+        if (item.type === "bun") {
+          decrease();
+          dispatch({
+            type: INCREASE_BUN,
+            item,
+          });
+        } else {
+          dispatch({
+            type: INCREASE_ITEM,
+            item,
+          });
+        }
+      }, {});
+  };
+  const [{ isHover }, dropTarget] = useDrop({
+    accept: "ingredients",
+    drop(itemId) {
+      addItem(itemId);
+      increase(itemId);
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+    }),
+  });
+
   const handleOpenModalOrder = () => {
     setModalOrder(true);
   };
 
   const handleCloseOrder = () => {
+    dispatch({
+      type: CLEAR_CONSTRUCTOR,
+    });
     setModalOrder(false);
   };
 
   const handleClick = () => {
+    if (!bun) {
+      toast("Добавьте булку!", {
+        theme: "dark",
+      });
+    }
+    if (ingredients.length === 0) {
+      toast("Добавьте ингредиенты!", {
+        theme: "dark",
+      });    }
     const orderIngredients = ingredients.map((item) => item._id);
     if (bun !== undefined) {
       orderIngredients.push(bun._id);
     }
-    postIngredients({ ingredients: orderIngredients })
-      .then((data) => {
-        setOrder(data);
-      })
-      .then(() => {
+    if (bun && ingredients) {
+      dispatch(postOrder({ ingredients: orderIngredients }));
+      setTimeout(() => {
         handleOpenModalOrder();
-      })
-      .catch((e) => {
-        console.error(e);
-      });
+      }, 150);
+    }
   };
-
+  const className = isHover ? "border" : "shadow";
+  const notNull = ingredients.length > 0 || bun ? "" : className;
   return (
     <div
-      className={`${BurgerConstructorStyle.constructor} ml-4 mr-4 mb-10 mt-25`}
+      ref={dropTarget}
+      className={`${BurgerConstructorStyle.constructor} ${notNull} ml-4 mr-4 mb-10 mt-25`}
     >
       {bun && (
         <ConstructorElement
@@ -98,9 +140,9 @@ const BurgerConstructor = () => {
         />
       )}
       <div
-        className={`${BurgerConstructorStyle.constructor__container}  mt-3 mb-3 custom-scroll`}
+        className={`${BurgerConstructorStyle.constructor__container} custom-scroll  mt-3 mb-3`}
       >
-        <IngredientList ingredients={ingredients} />
+        <IngredientList />
       </div>
       {bun && (
         <ConstructorElement
@@ -112,24 +154,27 @@ const BurgerConstructor = () => {
           thumbnail={bun.image}
         />
       )}
-      <div className={`${BurgerConstructorStyle.constructor__price} mt-10`}>
-        <p
-          className={`${BurgerConstructorStyle.constructor__price_item} text text_type_digits-medium pr-10`}
-        >
-          {price}
-          <span className="pl-1">
-            <CurrencyIcon type="primary" />
-          </span>
-        </p>
-        <Button
-          onClick={handleClick}
-          htmlType="button"
-          type="primary"
-          size="large"
-        >
-          Оформить заказ{" "}
-        </Button>
-      </div>
+      {(ingredients.length > 0 || bun) && (
+        <div className={`${BurgerConstructorStyle.constructor__price} mt-10`}>
+          <p
+            className={`${BurgerConstructorStyle.constructor__price_item} text text_type_digits-medium pr-10`}
+          >
+            {totalPrice}
+            <span className="pl-1">
+              <CurrencyIcon type="primary" />
+            </span>
+          </p>
+          <Button
+            onClick={handleClick}
+            htmlType="button"
+            type="primary"
+            size="large"
+          >
+            Оформить заказ{" "}
+          </Button>
+          <ToastContainer theme="dark" />
+        </div>
+      )}
 
       <Modal active={modalOrder} setActive={setModalOrder}>
         <OrderDetails popupClose={handleCloseOrder} />

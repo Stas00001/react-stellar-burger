@@ -1,69 +1,66 @@
 import React from "react";
+import { useRef, useEffect, useState } from "react";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
 import IngredientsCategories from "../ingredients-categories/ingredients-categories";
-import { IngredientsContext, SelectedIngredientsContext } from "../../services/use-context";
 import Modal from "../modal/modal";
 import IngredientDetails from "../ingredient-details/ingredient-details";
+import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { GET_INGREDIENT } from "../../services/actions/ingredients-details";
 const BurgerIngredient = (props) => {
-  const [state, setState] = React.useContext(IngredientsContext);
-  const [selectedIngredients, setSelectedIngredients] = React.useContext(SelectedIngredientsContext)
+  const {items} = useSelector(store => store.ingredients)
+  const {ingredient, successModal} = useSelector(store => store.ingredientsDetails)
+  const dispatch = useDispatch()
   const [modal, setModal] = React.useState(false);
   const [current, setCurrent] = React.useState("one");
-  const [modalIngredients, setModalIngredients] = React.useState({
-    ingredient: null,
-    bun: null,
-    successModal: false,
-  });
-
-  const data = state.data.data;
-  const {arrTypeBun, arrTypeMain, arrTypeSauce } = React.useMemo(() => {
+  const {arrTypeBun, arrTypeMain, arrTypeSauce } = useMemo(() => {
     return {
-     arrTypeBun: data.filter((item) => item.type === "bun"),
-     arrTypeMain: data.filter((item) => item.type === "main"),
-     arrTypeSauce: data.filter((item) => item.type === "sauce"),
+     arrTypeBun: items.filter((item) => item.type === "bun"),
+     arrTypeMain: items.filter((item) => item.type === "main"),
+     arrTypeSauce: items.filter((item) => item.type === "sauce"),
     }
-  }, [data])
+  
+  }, [items])
   
  
   const refBun = React.useRef(null);
   const refSauce = React.useRef(null);
   const refMain = React.useRef(null);
+  const containerRef = useRef(null)
+
+
+  const handlerScroll = () => {
+    const containerY = containerRef.current.getBoundingClientRect().y;
+    const bunsOffset = Math.abs(refBun.current.getBoundingClientRect().y - containerY);
+    const saucesOffset = Math.abs(refSauce.current.getBoundingClientRect().y - containerY);
+    const mainOffset = Math.abs(refMain.current.getBoundingClientRect().y - containerY);
+
+    if (bunsOffset < saucesOffset && bunsOffset < mainOffset) setCurrent('one');
+    if (saucesOffset < bunsOffset && saucesOffset < mainOffset) setCurrent('two');
+    if (mainOffset < bunsOffset && mainOffset < saucesOffset) setCurrent('three');
+  };
+
 
   const onClickCard = (e) => {
-    const result = data.filter((item) => item._id === e.currentTarget.id);
-    const ingredientsResult = result.reduce((res, ingredient) => {
-      if (ingredient.type === 'bun') {
-        setSelectedIngredients({...selectedIngredients, bun: ingredient})
-        setState({...state, constructor: true, constructorNull: false,})
-      } else {
-        setSelectedIngredients({...selectedIngredients, ingredients: [...selectedIngredients.ingredients, ingredient ]})
-        setState({...state, constructor: true, constructorNull: false,})
-      }
-      return{
-        ...ingredient
-      }
-    }, {});
-    // setSelectedIngredients([...selectedIngredients, ingredientsResult])
-    // handleOpenModalIngredient();
-    setModalIngredients({
-        ...modal,
-        successModal: true,
-        ingredient: ingredientsResult,
-      });
+    const item = items.find((item) => item._id === e.currentTarget.id);
+    dispatch({
+      type: GET_INGREDIENT,
+      item
+    })
+    handleOpenModalIngredient();
   }
-  // const handleOpenModalIngredient = () => {
-  //   setModal(true);
-  // };
+  const handleOpenModalIngredient = () => {
+    setModal(true);
+  };
   const tabHandler = (ref) => {
-    ref.current.scrollIntoView();
+    ref.current.scrollIntoView({ behavior: 'smooth'});
   };
 
   const handleClick = (ref) => {
     tabHandler(ref);
   };
 
-  const { successModal } = modalIngredients;
 
   return (
     <div className={`${burgerIngredientsStyle.ingredients} mt-10`}>
@@ -101,32 +98,35 @@ const BurgerIngredient = (props) => {
         </Tab>
       </div>
       <div
-        className={`${burgerIngredientsStyle.ingredients__container} custom-scroll`}
+      ref={containerRef} 
+      className={`${burgerIngredientsStyle.ingredients__container} custom-scroll`}
+      onScroll={handlerScroll}
       >
-       
         <IngredientsCategories 
         refBun ={refBun} 
         title = 'Булки' 
         onClickCard={onClickCard} 
         data={arrTypeBun} />
-        
+
         <IngredientsCategories
-          refBun ={refSauce} 
+          refBun ={refSauce}
           title = 'Соусы' 
           onClickCard={onClickCard}
           data={arrTypeSauce}
         />
+        
         <IngredientsCategories
           refBun ={refMain} 
           title = 'Начинки' 
           onClickCard={onClickCard}
           data={arrTypeMain} 
           />
+
       </div>
       <Modal active={modal} setActive={setModal}>
         {successModal && (
           <IngredientDetails
-            data={modalIngredients.ingredient}
+            data={ingredient}
           />
         )}
       </Modal>

@@ -29,6 +29,14 @@
     justify-content: center;
     align-items: center;
 }
+
+.header__link:active {
+    color: var(--primary-light-color);
+}
+.header__link:focus {
+    color: var(--primary-light-color);
+}
+
 .header__link svg:hover {
     fill: var(--primary-light-color);
 }

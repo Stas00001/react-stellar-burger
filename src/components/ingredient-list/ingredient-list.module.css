@@ -1,6 +1,6 @@
 .constructor__list {
     display: flex;
-    min-width: 100%;
+    width: 100%;
     flex-direction: column;
     align-items: flex-end;
     gap: 16px;
