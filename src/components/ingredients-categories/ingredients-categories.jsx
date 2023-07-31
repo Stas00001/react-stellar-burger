@@ -1,4 +1,3 @@
-import React, { Children } from "react";
 import ingredientsCategoriesStyle from "./ingredients-categories.module.css";
 import PropTypes from "prop-types";
 import {

@@ -20,3 +20,9 @@
 .popup__button:hover {
     opacity: .3;
 }
+
+img:hover {
+    cursor: pointer;
+    opacity: .8;
+   
+}

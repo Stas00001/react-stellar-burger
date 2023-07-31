@@ -1,7 +1,5 @@
-import React from "react";
 import {
   Logo,
-  Typography,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   BurgerIcon,
