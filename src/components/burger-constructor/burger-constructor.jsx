@@ -115,7 +115,7 @@ const BurgerConstructor = () => {
     if (bun !== undefined) {
       orderIngredients.push(bun._id);
     }
-    if (bun && ingredients) {
+    if (bun && ingredients.length > 0) {
       dispatch(postOrder({ ingredients: orderIngredients }));
       setTimeout(() => {
         handleOpenModalOrder();
