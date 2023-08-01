@@ -20,14 +20,7 @@ function Constructor() {
   return (
     <div className={styles.app}>
       {itemsRequest && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "90vh",
-          }}
-        >
+        <div className={`${styles['app__container-loader']}`}>
           <Loader />
         </div>
       )}

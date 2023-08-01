@@ -12,3 +12,10 @@
   gap: 40px;
   max-width: calc(100% - 10%);
 }
+
+.app__container-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}

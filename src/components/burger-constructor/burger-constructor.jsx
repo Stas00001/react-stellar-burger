@@ -16,6 +16,7 @@ import {
   INCREASE_ITEM,
   INCREASE_BUN,
   CLEAR_CONSTRUCTOR,
+  addIngredient,
 } from "../../services/actions/ingredients";
 import { postOrder } from "../../services/actions/order";
 import { useDrop } from "react-dnd";
@@ -27,7 +28,6 @@ import "react-toastify/dist/ReactToastify.css";
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const { items, ingredients, bun } = useSelector((store) => store.ingredients);
-  const [modalOrder, setModalOrder] = React.useState(false);
   const totalPrice = useMemo(() => {
     return items.reduce((acc, item) => acc + item.price * item.__v, 0);
   }, [items]);
@@ -44,10 +44,7 @@ const BurgerConstructor = () => {
           ...ingredient,
           key: uuidv4(),
         };
-        dispatch({
-          type: ADD_INGREDIENTS,
-          item,
-        });
+        dispatch(addIngredient(ingredient));
       }
       return {
         ...ingredient,
@@ -90,17 +87,6 @@ const BurgerConstructor = () => {
     }),
   });
 
-  const handleOpenModalOrder = () => {
-    setModalOrder(true);
-  };
-
-  const handleCloseOrder = () => {
-    dispatch({
-      type: CLEAR_CONSTRUCTOR,
-    });
-    setModalOrder(false);
-  };
-
   const handleClick = () => {
     if (!bun) {
       toast("Добавьте булку!", {
@@ -110,18 +96,17 @@ const BurgerConstructor = () => {
     if (ingredients.length === 0) {
       toast("Добавьте ингредиенты!", {
         theme: "dark",
-      });    }
+      });
+    }
     const orderIngredients = ingredients.map((item) => item._id);
     if (bun !== undefined) {
       orderIngredients.push(bun._id);
     }
     if (bun && ingredients.length > 0) {
       dispatch(postOrder({ ingredients: orderIngredients }));
-      setTimeout(() => {
-        handleOpenModalOrder();
-      }, 150);
     }
   };
+
   const className = isHover ? "border" : "shadow";
   const notNull = ingredients.length > 0 || bun ? "" : className;
   return (
@@ -176,9 +161,7 @@ const BurgerConstructor = () => {
         </div>
       )}
 
-      <Modal active={modalOrder} setActive={setModalOrder}>
-        <OrderDetails popupClose={handleCloseOrder} />
-      </Modal>
+      <OrderDetails />
     </div>
   );
 };

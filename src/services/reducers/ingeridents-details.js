@@ -1,7 +1,7 @@
 import { GET_INGREDIENT, CLEAR_INGREDIENT } from "../actions/ingredients-details"
 
 const initialState = {
-    ingredient: {},
+    ingredient: null,
     successModal: false,
 
 }
@@ -20,7 +20,7 @@ export const ingredientsDetailsReducer = (state = initialState, action) => {
         case CLEAR_INGREDIENT: {
             return {
                 ...state,
-                ingredient: {},
+                ingredient: null,
                 successModal: false
             }
         }

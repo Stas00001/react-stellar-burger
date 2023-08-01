@@ -4,6 +4,8 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useRef } from "react";
+import { ingredientPropType } from "../../utils/prop-types";
+import PropTypes from 'prop-types';
 import { useDrag, useDrop } from "react-dnd";
 import { DELETE_ITEM, DECREASE_ITEM } from "../../services/actions/ingredients";
 import { useDispatch } from "react-redux";
@@ -83,4 +85,11 @@ const IngredientItem = ({ item, moveElement, index, id, keys }) => {
   );
 };
 
+IngredientItem.propTypes = {
+  item: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
+  moveElement: PropTypes.func.isRequired,
+  index: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
+  keys: PropTypes.string.isRequired
+};
 export default IngredientItem;

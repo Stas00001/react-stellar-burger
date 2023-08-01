@@ -36,9 +36,9 @@ const BurgerIngredient = (props) => {
     const saucesOffset = Math.abs(refSauce.current.getBoundingClientRect().y - containerY);
     const mainOffset = Math.abs(refMain.current.getBoundingClientRect().y - containerY);
 
-    if (bunsOffset < saucesOffset && bunsOffset < mainOffset) setCurrent('one');
-    if (saucesOffset < bunsOffset && saucesOffset < mainOffset) setCurrent('two');
-    if (mainOffset < bunsOffset && mainOffset < saucesOffset) setCurrent('three');
+    if (bunsOffset < saucesOffset && bunsOffset < mainOffset) setCurrent('bun');
+    if (saucesOffset < bunsOffset && saucesOffset < mainOffset) setCurrent('sauce');
+    if (mainOffset < bunsOffset && mainOffset < saucesOffset) setCurrent('main');
   };
 
 
@@ -67,31 +67,31 @@ const BurgerIngredient = (props) => {
       <h1 className="text text_type_main-large pb-5">Соберите бургер</h1>
       <div className={`${burgerIngredientsStyle.ingredients__tab} pb-10`}>
         <Tab
-          value="one"
-          active={current === "one"}
+          value="bun"
+          active={current === "bun"}
           onClick={() => {
-            setCurrent("one");
+            setCurrent("bun");
             handleClick(refBun);
           }}
         >
           Булки
         </Tab>
         <Tab
-          value="two"
-          active={current === "two"}
+          value="sauce"
+          active={current === "sauce"}
           onClick={() => {
-            setCurrent("two");
+            setCurrent("sauce");
             handleClick(refSauce);
           }}
         >
           Соусы
         </Tab>
         <Tab
-          value="three"
-          active={current === "three"}
+          value="main"
+          active={current === "main"}
           onClick={() => {
             handleClick(refMain);
-            setCurrent("three");
+            setCurrent("main");
           }}
         >
           Начинки
