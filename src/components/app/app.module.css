@@ -1,7 +1,6 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
   background-color: #131316;
   color: #f2f2f3;
 }
@@ -12,4 +11,11 @@
   margin: 0 auto;
   gap: 40px;
   max-width: calc(100% - 10%);
+}
+
+.app__container-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
 }
