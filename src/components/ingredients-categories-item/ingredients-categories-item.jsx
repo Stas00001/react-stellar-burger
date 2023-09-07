@@ -5,9 +5,12 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, Link } from "react-router-dom";
 const IngredientsCategoriesItem = ({ data, onClickCard }) => {
   const { _id } = data;
   const dispatch = useDispatch();
+  const location = useLocation();
+  const ingredientId = data['_id'];
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredients",
     item: { _id },
@@ -24,7 +27,14 @@ const IngredientsCategoriesItem = ({ data, onClickCard }) => {
   };
 
   const count = isNull() ? false : true;
+  
   return (
+    <Link
+    key={ingredientId}
+    to={`/ingredients/${ingredientId}`}
+    state={{ background: location }}
+    className="link"
+  >
     <div
       ref={dragRef}
       onClick={(e) => onClickCard(e)}
@@ -49,6 +59,8 @@ const IngredientsCategoriesItem = ({ data, onClickCard }) => {
       </p>
       <p className={`text text_type_main-default`}>{data.name}</p>
     </div>
+    </Link>
+
   );
 };
 export default IngredientsCategoriesItem;

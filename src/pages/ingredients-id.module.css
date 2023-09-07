@@ -1,0 +1,28 @@
+.ingredient {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+  }
+
+.text {
+    text-align: center;
+    line-height: 24px;
+    margin: 0;
+    padding-top: 8px;
+}
+
+.image {
+    min-width: 30vw;
+    margin: 0 auto;
+}
+
+
+
+.list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+}

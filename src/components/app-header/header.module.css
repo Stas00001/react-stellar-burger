@@ -30,18 +30,19 @@
     align-items: center;
 }
 
-.header__link:active {
+.header__link-active {
     color: var(--primary-light-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.header__link:focus {
+
+.header__link:hover {
     color: var(--primary-light-color);
 }
 
-.header__link svg:hover {
+.header__link:hover svg {
     fill: var(--primary-light-color);
-}
-.header__link:hover {
-    color: var(--primary-light-color);
 }
 
 .header__span {

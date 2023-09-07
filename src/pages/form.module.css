@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 100%;
+    height: 90vh;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+
+.link {
+    text-decoration: none;
+    color: #4C4CFF;
+}
+
+.link:hover {
+    opacity: 0.3;
+    transition: opacity .2s ease ;
+}

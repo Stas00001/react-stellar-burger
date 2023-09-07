@@ -6,16 +6,13 @@ import {
   Button,
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../modal/modal";
 import OrderDetails from "../order-details/order-details";
 import { useDispatch } from "react-redux";
 import {
-  ADD_INGREDIENTS,
   ADD_BUN,
   DECREASE_BUN,
   INCREASE_ITEM,
   INCREASE_BUN,
-  CLEAR_CONSTRUCTOR,
   addIngredient,
 } from "../../services/actions/ingredients";
 import { postOrder } from "../../services/actions/order";
@@ -24,9 +21,11 @@ import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getCookie } from "../../utils/cooke";
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
+  const isLogin = getCookie("accessToken");
   const { items, ingredients, bun } = useSelector((store) => store.ingredients);
   const totalPrice = useMemo(() => {
     return items.reduce((acc, item) => acc + item.price * item.__v, 0);
@@ -98,11 +97,16 @@ const BurgerConstructor = () => {
         theme: "dark",
       });
     }
+    if (!isLogin) {
+      toast("Необходимо авторизороваться!", {
+        theme: "dark",
+      });
+    }
     const orderIngredients = ingredients.map((item) => item._id);
     if (bun !== undefined) {
       orderIngredients.push(bun._id);
     }
-    if (bun && ingredients.length > 0) {
+    if (bun && ingredients.length > 0 && isLogin) {
       dispatch(postOrder({ ingredients: orderIngredients }));
     }
   };

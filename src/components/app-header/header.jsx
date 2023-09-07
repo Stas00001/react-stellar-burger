@@ -1,50 +1,64 @@
-import {
-  Logo,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   BurgerIcon,
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import header from "./header.module.css";
-import {Link} from "react-router-dom"
-const Header = (props) => {
+import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+const Header = () => {
+  const { isLogin } = useSelector((store) => store.user);
+
+  const link = isLogin ? "/profile" : "/login";
   return (
     <header className={header.header}>
       <ul className={header.header__menu}>
         <li className={`pr-2  ${header.header__menu_item}`}>
-          <Link
-            to="/constructor"
-            className={`${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`}
+          <NavLink
+            to="/"
+            className={({ isActive, isPending }) =>
+              isActive
+                ? `${header["header__link-active"]} link_active link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+                : `${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+            }
           >
             <span className={`pr-2 ${header.header__span}`}>
               <BurgerIcon type="secondary" />
             </span>
             Конструктор{" "}
-          </Link>
+          </NavLink>
         </li>
         <li className={header.header__menu_item}>
-          <Link
-            to="/error"
-            className={`${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`}
+          <NavLink
+            to='/order'
+            className={({ isActive, isPending }) =>
+              isActive
+                ? `${header["header__link-active"]} link_active link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+                : `${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+            }
           >
             <span className={`pr-2 ${header.header__span}`}>
               <ListIcon type="secondary" />
             </span>
             Лента заказов
-          </Link>
+          </NavLink>
         </li>
       </ul>
       <Logo />
-      <Link
-        to="/error"
-        className={`${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`}
+      <NavLink
+        to='/profile'
+        className={({ isActive, isPending }) =>
+          isActive
+            ? `${header["header__link-active"]} link_active  link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+            : `${header.header__link} link text text_type_main-default pl-5 pr-5 pt-4 pb-4`
+        }
       >
         <span className={`pr-2 ${header.header__span}`}>
           <ProfileIcon type="secondary" />
         </span>{" "}
         Личный кабинет
-      </Link>
+      </NavLink>
     </header>
   );
 };
