@@ -22,7 +22,10 @@ const postIngredients = (body) => {
 const registerUser = (body) => {
   return fetch(`${configApi.baseUrl}/auth/register`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getCookie("accessToken"),
+    },
     body: JSON.stringify(body),
   }).then(getResponse);
 };

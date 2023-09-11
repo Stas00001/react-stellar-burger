@@ -15,12 +15,12 @@ import { ToastContainer, toast } from "react-toastify";
 const ForgotPassword = () => {
   const dispatch = useDispatch();
   const {values, onChange} = useFormField({email: ''})
-  const { forgotPasswordSuccess } = useSelector((store) => store.user);
+  const { forgotPasswordSuccess, forgotPasswordFailed } = useSelector((store) => store.user);
 
-  const useProvideForgotPassword = async (e) => {
+  const forgotPasswordSubmit =(e) => {
     e.preventDefault();
     if (values.email) {
-      await dispatch(forgotPassword({
+       dispatch(forgotPassword({
         email: values.email
       }));
     } else {
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
   return (
     <div className={style.container}>
       <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
-      <form className={style.form}>
+      <form onSubmit={forgotPasswordSubmit} className={style.form}>
         <EmailInput
           extraClass="mb-6"
           placeholder="Укажите e-mail"
@@ -58,16 +58,21 @@ const ForgotPassword = () => {
           name={"email"}
           isIcon={false}
         />
-      </form>
-      <Button
+        {forgotPasswordFailed && (
+          <p className="text text_type_main-default pb-3" style={{ color: "red" }}>
+           Ошибка. Неверная почта!
+          </p>
+        )}
+         <Button
         extraClass="mb-20"
-        htmlType="button"
+        htmlType="submit"
         type="primary"
         size="medium"
-        onClick={useProvideForgotPassword}
       >
         Восстоновить
       </Button>
+      </form>
+    
       <p className="text text_type_main-default text_color_inactive pb-4">
         Вспомнили пароль?{" "}
         <Link className={style.link} to="/login">

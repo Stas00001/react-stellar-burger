@@ -9,8 +9,7 @@ import { CLEAR_INGREDIENT } from "../../services/actions/ingredients-details";
 const modalRoot = document.getElementById("react-modals");
 
 const Modal = (props) => {
-  const { children, active, setActive, handleModalClose } = props;
-  const { order } = useSelector((store) => store.order);
+  const { children, active, handleModalClose } = props;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -19,10 +18,8 @@ const Modal = (props) => {
     return () => document.removeEventListener("keydown", closePopupEsc);
   }, []);
 
-  
-  const closePopupEsc = (evt) => (
-    evt.key === "Escape" ? handleModalClose() : null
-  );
+  const closePopupEsc = (evt) =>
+    evt.key === "Escape" ? handleModalClose() : null;
 
   return ReactDOM.createPortal(
     <>

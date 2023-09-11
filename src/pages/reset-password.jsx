@@ -11,14 +11,14 @@ import { Navigate } from "react-router-dom";
 import { resetPassword } from "../services/actions/user";
 import { useFormField } from "../utils/hook/useFormField";
 const ResetPassword = () => {
-  const { values, onChange } = useFormField({ password: "", code: "" });
+  const { values, onChange } = useFormField({ password: "", token: "" });
   const { forgotPasswordSuccess } = useSelector((store) => store.user);
   const dispatch = useDispatch
   const resetPasswordSubmit = (e) => {
     e.preventDefault();
     dispatch(resetPassword({
       password: values.password,
-      token: values.code
+      token: values.token
     }))
   };
   if (!forgotPasswordSuccess) {
@@ -33,7 +33,7 @@ const ResetPassword = () => {
   return (
     <div className={style.container}>
       <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
-      <form className={style.form}>
+      <form onSubmit={resetPasswordSubmit} className={style.form}>
         <PasswordInput
           onChange={onChange}
           value={values.password}
@@ -42,21 +42,20 @@ const ResetPassword = () => {
         />
         <Input
           onChange={onChange}
-          value={values.code}
+          value={values.token}
           name={"emailCod"}
           placeholder="Укажите код из письма"
           extraClass="mb-6"
         />
-      </form>
-      <Button
+         <Button
         extraClass="mb-20"
         htmlType="button"
         type="submit"
         size="medium"
-        onChange={resetPasswordSubmit}
       >
         Сохранить
       </Button>
+      </form>
       <p className="text text_type_main-default text_color_inactive pb-4">
         Вспомнили пароль?{" "}
         <Link className={style.link} to="/login">

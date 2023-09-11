@@ -12,20 +12,25 @@ import { useFormField } from "../utils/hook/useFormField";
 import { ToastContainer, toast } from "react-toastify";
 
 const Register = () => {
-  const { isLogin } = useSelector((store) => store.user);
+  const { user, registerFailed } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const { values, onChange } = useFormField({ email: '',  password: '', name: ''});
+  const { values, onChange } = useFormField({
+    email: "",
+    password: "",
+    name: "",
+  });
 
-  const useProvideRegister = async (e) => {
+  const registerSubmit = (e) => {
     e.preventDefault();
     if (values.email && values.password && values.name) {
-      await dispatch(
+      dispatch(
         register({
           email: values.email,
           password: values.password,
           name: values.name,
         })
       );
+      return <Navigate to={"/"} />;
     } else {
       toast.error("Заполните все поля", {
         position: "top-right",
@@ -39,12 +44,13 @@ const Register = () => {
       });
     }
   };
-  
+
+
 
   return (
     <div className={style.container}>
       <p className="text text_type_main-medium mb-6">Регистрация</p>
-      <form className={style.form}>
+      <form onSubmit={registerSubmit} className={style.form}>
         <Input
           type={"text"}
           placeholder={"Имя"}
@@ -68,16 +74,21 @@ const Register = () => {
           extraClass="mb-6"
           onChange={onChange}
         />
-      </form>
-      <Button
-        onClick={useProvideRegister}
+         {registerFailed && (
+          <p className="text text_type_main-default" style={{ color: "red" }}>
+           Данное имя уже занято!
+          </p>
+        )}
+         <Button
         extraClass="mb-20"
-        htmlType="button"
+        htmlType="submit"
         type="primary"
         size="medium"
       >
         Зарегистрироваться
       </Button>
+      </form>
+
       <p className="text text_type_main-default text_color_inactive pb-4">
         Уже зарегистрированы?{" "}
         <Link className={style.link} to="/login">

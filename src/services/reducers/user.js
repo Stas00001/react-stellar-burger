@@ -20,10 +20,11 @@ import {
   POST_RESETPASSWORD_FAILED,
   POST_RESETPASSWORD_SUCCESS,
   POST_RESETPASSWORD_REQUEST,
+  RESET_USER,
 } from "../actions/user";
 
 const initialState = {
-  user: null,
+  user: { },
   registerRequest: false,
   registerFailed: false,
   registerSucces: false,
@@ -45,7 +46,7 @@ const initialState = {
   postResetPasswordFailed: false,
   postResetPasswordSuccess: false,
   postResetPasswordRequest: false,
-  error: null
+  error: null,
 };
 
 export const userReducer = (state = initialState, action) => {
@@ -54,6 +55,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         registerRequest: true,
+        registerFailed: false
       };
     }
     case REGISTER_USER_SUCCESS: {
@@ -62,7 +64,7 @@ export const userReducer = (state = initialState, action) => {
         registerFailed: false,
         user: action.payload.user,
         registerRequest: false,
-        registerSucces: true,
+        registerSuccess: true,
       };
     }
     case REGISTER_USER_FAILED: {
@@ -70,7 +72,7 @@ export const userReducer = (state = initialState, action) => {
         ...state,
         registerFailed: true,
         registerRequest: false,
-        registerSucces: false,
+        registerSuccess: false,
       };
     }
 
@@ -78,6 +80,7 @@ export const userReducer = (state = initialState, action) => {
       return {
         ...state,
         loginRequest: true,
+        loginFailed: false
       };
     }
 
@@ -97,7 +100,7 @@ export const userReducer = (state = initialState, action) => {
         loginFailed: true,
         loginRequest: false,
         loginSucces: false,
-        error: action.payload
+        error: action.payload,
       };
     }
 
@@ -168,7 +171,11 @@ export const userReducer = (state = initialState, action) => {
         getUserFailed: false,
         getUserRequest: false,
         getUserSuccess: true,
-        user: action.payload.user,
+        user: {
+          email: action.payload.user.email,
+          name: action.payload.user.name,
+          password: "",
+        },
       };
     }
 
@@ -234,6 +241,12 @@ export const userReducer = (state = initialState, action) => {
       };
     }
 
+    case RESET_USER: {
+      return {
+        ...state,
+        user: {},
+      };
+    }
     default: {
       return state;
     }

@@ -5,7 +5,7 @@ import {
   PasswordInput,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Navigate} from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useFormField } from "../utils/hook/useFormField";
 import { login } from "../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,21 +13,21 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { values, onChange } = useFormField({ email: '',  password: ''});
-  const { user, loginFailed} = useSelector((store) => store.user);
-  const useProvideLogin = async (e) => {
+  const navigate = useNavigate();
+  const { values, onChange } = useFormField({ email: "", password: "" });
+  const { user, loginFailed } = useSelector(
+    (store) => store.user
+  );
+
+  const loginSubmit = (e) => {
     e.preventDefault();
     if (values.email && values.password) {
-      try {
-        await dispatch(
-          login({
-            email: values.email,
-            password: values.password,
-          })
-        );
-      } catch (e) {
-        console.log(e);
-      } 
+      dispatch(
+        login({
+          email: values.email,
+          password: values.password,
+        })
+      );
     } else {
       toast.error("Заполните все поля", {
         position: "top-right",
@@ -41,18 +41,14 @@ const Login = () => {
       });
     }
   };
-  if (user) {
-    return (
-      <Navigate
-        to={'/'}
-      />
-    );
+  if (Object.keys(user).length !== 0) {
+    return <Navigate to="/" />;
   }
 
   return (
     <div className={style.container}>
       <p className="text text_type_main-medium mb-6">Вход</p>
-      <form className={style.form}>
+      <form onSubmit={loginSubmit} className={style.form}>
         <EmailInput
           extraClass="mb-6"
           value={values.email}
@@ -66,16 +62,21 @@ const Login = () => {
           onChange={onChange}
           extraClass="mb-6"
         />
+         {loginFailed && (
+          <p className="text text_type_main-default pb-3" style={{ color: "red" }}>
+            Ошибка входа. Проверьте логин или пароль.
+          </p>
+        )}
+        <Button
+          htmlType="submit"
+          type="primary"
+          size="medium"
+          extraClass={`mb-20`}
+        >
+          Войти
+        </Button>
       </form>
-      <Button
-        onClick={useProvideLogin}
-        extraClass="mb-20"
-        htmlType="button"
-        type="primary"
-        size="medium"
-      >
-        Войти
-      </Button>
+
       <p className="text text_type_main-default text_color_inactive pb-4">
         Вы - новый пользователь?{" "}
         <Link className={style.link} to="/register">

@@ -29,12 +29,17 @@ export const PATCH_USER_FAILED = "PATCH_USER_FAILED";
 export const POST_RESETPASSWORD_FAILED = "POST_RESETPASSWORD_FAILED";
 export const POST_RESETPASSWORD_REQUEST = "POST_RESETPASSWORD_REQUEST";
 export const POST_RESETPASSWORD_SUCCESS = "POST_RESETPASSWORD_SUCCESS";
-export const registerUserSuccess = () => ({
+export const RESET_USER = 'RESET_USER'
+
+export const resetUser = () => ({
+    type: RESET_USER
+})
+export const registerUserSuccess = (payload) => ({
   type: REGISTER_USER_SUCCESS,
+  payload
 });
-export const registerUserRequest = (payload) => ({
+export const registerUserRequest = () => ({
   type: REGISTER_USER_REQUEST,
-  payload,
 });
 export const registerUserFailed = () => ({
   type: REGISTER_USER_FAILED,
@@ -124,9 +129,12 @@ export const login = (body) => {
           dispatch(loginUserSuccess(res));
           setCookie("accessToken", res.accessToken.split("Bearer ")[1]);
           setCookie("refreshToken", res.refreshToken);
+        }else if (res.status !== 200){
+            
         }
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log(e)
         dispatch(loginUserFailed());
       });
   };
@@ -172,7 +180,7 @@ export const getUserData = () => {
       .then((res) => {
         if (res && res.success) {
           dispatch(getUserSuccess(res));
-        }
+        } 
       })
       .catch((e) => {
         dispatch(getUserFailed());

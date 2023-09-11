@@ -1,4 +1,5 @@
 import { postIngredients } from "../../utils/api";
+import { token } from "./user";
 export const POST_ORDER = 'POST_ORDER'
 export const GET_INGREDIENTS = 'GET_INGREDIENTS';
 export const POST_ORDER_REQUEST = 'POST_ORDER_REQUEST';
@@ -21,6 +22,8 @@ export const postOrder = (body) => {
           dispatch({
             type: POST_ORDER_FAILED
           });
+          dispatch(token());
+          dispatch(postOrder())
         }
       })
     };

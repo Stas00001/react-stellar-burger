@@ -22,12 +22,12 @@ const AppLoader = () => {
   const background = location.state && location.state.background;
   const {ingredient, successModal} = useSelector(store => store.ingredientsDetails)
   const [active, setActive] = useState(false)
-  React.useMemo(() => {
+  React.useEffect(() => {
     if(ingredient) {
       setActive(true)
     }
   }, [ingredient])
-  
+ 
   const handleModalClose = () => {
     setTimeout(() => {
       dispatch({

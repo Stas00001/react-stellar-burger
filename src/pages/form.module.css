@@ -10,6 +10,8 @@
 .form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
 }
 
@@ -22,4 +24,8 @@
 .link:hover {
     opacity: 0.3;
     transition: opacity .2s ease ;
+}
+
+.button { 
+    width: 50%;
 }

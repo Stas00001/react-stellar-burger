@@ -98,7 +98,7 @@ const BurgerConstructor = () => {
       });
     }
     if (!isLogin) {
-      toast("Необходимо авторизороваться!", {
+      toast("Необходимо авторизоваться!", {
         theme: "dark",
       });
     }

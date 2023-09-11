@@ -2,14 +2,17 @@ import style from './nav-profile.module.css'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { postLogout } from '../../utils/api'
 import { deleteCookie } from '../../utils/cooke'
+import { resetUser } from '../../services/actions/user'
+import { useDispatch } from 'react-redux'
 const NavProfile = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const logout = () => {
     postLogout().then((res)=>{
       if(res && res.success) {
         deleteCookie('accessToken')
         deleteCookie('refreshToken')
-        navigate('/login')
+        dispatch(resetUser())
       }
     }).catch(e => {
       console.log(e)
@@ -25,8 +28,8 @@ const NavProfile = () => {
         to='/profile'
           className={({ isActive }) =>
             isActive
-              ? `link text text_type_main-large`
-              : `link text text_type_main-large text_color_inactive`
+              ? `link text text_type_main-medium`
+              : `link text text_type_main-medium text_color_inactive`
           }
         >
           Профиль
@@ -37,8 +40,8 @@ const NavProfile = () => {
           to="/profile/order"
           className={({ isActive }) =>
             isActive
-              ? `link text text_type_main-large`
-              : `link text text_type_main-large text_color_inactive`
+              ? `link text text_type_main-medium`
+              : `link text text_type_main-medium text_color_inactive`
           }
         >
           История заказов
@@ -50,8 +53,8 @@ const NavProfile = () => {
         onClick={logout}
           className={({ isActive }) =>
             isActive
-              ? `link text text_type_main-large`
-              : `link text text_type_main-large text_color_inactive`
+              ? `link text text_type_main-medium`
+              : `link text text_type_main-medium text_color_inactive`
           }
         >
           Выход

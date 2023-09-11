@@ -7,31 +7,22 @@ import { CLEAR_ORDER } from "../../services/actions/order";
 import { CLEAR_CONSTRUCTOR } from "../../services/actions/ingredients";
 const OrderDetails = () => {
   const { order } = useSelector((store) => store.order);
-  const [modalOrder, setModalOrder] = React.useState(false);
-
+  const isModalOrder = Boolean(order);
   const dispatch = useDispatch();
-  React.useMemo(() => {
-    if (order) {
-      setModalOrder(true);
-    }
-  }, [order]);
+ 
   const close = () => {
-    setTimeout(() => {
       dispatch({
         type: CLEAR_ORDER,
       });
       dispatch({
         type: CLEAR_CONSTRUCTOR,
       });
-    }, 600);
-    setModalOrder(false);
 
   };
   
   return (
         <Modal
-          active={modalOrder}
-          setActive={setModalOrder}
+          active={isModalOrder}
           handleModalClose={close}
         >
           <div className={`${popupStyle.popup} pb-30 pt-30`}>
