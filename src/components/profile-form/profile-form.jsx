@@ -5,7 +5,6 @@ import {
   PasswordInput,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useFormField } from "../../utils/hook/useFormField";
-import { getUserData } from "../../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import style from "./profile-form.module.css";
@@ -14,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const ProfileForm = () => {
   const { user } = useSelector((store) => store.user);
+  const [activeButtons, setActiveButtons] = React.useState(false)
   const { values, setValue, onChange } = useFormField({
     email: "",
     name: "",
@@ -48,8 +48,14 @@ const ProfileForm = () => {
         progress: undefined,
         theme: "dark",
       });
+
+      setActiveButtons(false)
   };    
 
+  const onChangeProfile = (evt) => {
+    onChange(evt)
+    setActiveButtons(true)
+  }
 
   const resetForm = () => {
     setValue({
@@ -57,11 +63,12 @@ const ProfileForm = () => {
       name: user.name,
       password: "",
     });
+    setActiveButtons(false)
 };
 
   return (
     <>
-      {values && (
+      {user && (
         <form onSubmit={updateUserSubmit} className={style.form__container} action="">
           <Input
             placeholder={"Имя"}
@@ -72,7 +79,7 @@ const ProfileForm = () => {
             icon="EditIcon"
             errorText={"Ошибка"}
             extraClass="mb-6"
-            onChange={onChange}
+            onChange={onChangeProfile}
           />
           <EmailInput
             disabled={disabled}
@@ -82,16 +89,16 @@ const ProfileForm = () => {
             value={values.email}
             name={"email"}
             isIcon={false}
-            onChange={onChange}
+            onChange={onChangeProfile}
           />
           <PasswordInput
             icon="EditIcon"
             value={values.password}
             name={"password"}
             extraClass="mb-6"
-            onChange={onChange}
+            onChange={onChangeProfile}
           />
-          {!deepEqual(values, user) && (
+          {activeButtons && (
             <div className={style.buttons}>
               <Button
                 onClick={resetForm}

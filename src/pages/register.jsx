@@ -5,7 +5,7 @@ import {
   Input,
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { register } from "../services/actions/user";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormField } from "../utils/hook/useFormField";
@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const Register = () => {
   const { user, registerFailed } = useSelector((store) => store.user);
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { values, onChange } = useFormField({
     email: "",
@@ -30,7 +31,7 @@ const Register = () => {
           name: values.name,
         })
       );
-      return <Navigate to={"/"} />;
+      navigate('/')
     } else {
       toast.error("Заполните все поля", {
         position: "top-right",

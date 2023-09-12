@@ -12,14 +12,16 @@ import { resetPassword } from "../services/actions/user";
 import { useFormField } from "../utils/hook/useFormField";
 const ResetPassword = () => {
   const { values, onChange } = useFormField({ password: "", token: "" });
-  const { forgotPasswordSuccess } = useSelector((store) => store.user);
-  const dispatch = useDispatch
+  const { forgotPasswordSuccess, postResetPasswordFailed } = useSelector((store) => store.user);
+  const dispatch = useDispatch;
   const resetPasswordSubmit = (e) => {
     e.preventDefault();
-    dispatch(resetPassword({
-      password: values.password,
-      token: values.token
-    }))
+    dispatch(
+      resetPassword({
+        password: values.password,
+        token: values.token,
+      })
+    );
   };
   if (!forgotPasswordSuccess) {
     return (
@@ -29,32 +31,36 @@ const ResetPassword = () => {
     );
   }
 
-
   return (
     <div className={style.container}>
       <p className="text text_type_main-medium mb-6">Восстановление пароля</p>
       <form onSubmit={resetPasswordSubmit} className={style.form}>
-        <PasswordInput
-          onChange={onChange}
+      <PasswordInput
           value={values.password}
-          name={"newPassword"}
+          name={"password"}
           extraClass="mb-6"
+          onChange={onChange}
         />
         <Input
           onChange={onChange}
           value={values.token}
-          name={"emailCod"}
+          name={"token"}
           placeholder="Укажите код из письма"
           extraClass="mb-6"
         />
-         <Button
-        extraClass="mb-20"
-        htmlType="button"
-        type="submit"
-        size="medium"
-      >
-        Сохранить
-      </Button>
+        {postResetPasswordFailed && (
+          <p className="text text_type_main-default" style={{ color: "red" }}>
+           Ошибка. Неверный код!
+          </p>
+        )}
+        <Button
+          extraClass="mb-20"
+          htmlType="submit"
+          type="primary"
+          size="medium"
+        >
+          Сохранить
+        </Button>
       </form>
       <p className="text text_type_main-default text_color_inactive pb-4">
         Вспомнили пароль?{" "}

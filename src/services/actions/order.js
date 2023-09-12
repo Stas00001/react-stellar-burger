@@ -18,13 +18,13 @@ export const postOrder = (body) => {
             type: POST_ORDER_SUCCESS,
             order: res
           });
-        } else {
-          dispatch({
-            type: POST_ORDER_FAILED
-          });
-          dispatch(token());
-          dispatch(postOrder())
         }
+      }).catch((e) => {
+        dispatch({
+          type: POST_ORDER_FAILED
+        });
+        dispatch(token());
+        dispatch(postOrder())
       })
     };
   

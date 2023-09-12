@@ -14,7 +14,10 @@ const getIngredients = () => {
 const postIngredients = (body) => {
   return fetch(`${configApi.baseUrl}/orders`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + getCookie("accessToken"),
+    },
     body: JSON.stringify(body),
   }).then(getResponse);
 };
@@ -24,7 +27,6 @@ const registerUser = (body) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + getCookie("accessToken"),
     },
     body: JSON.stringify(body),
   }).then(getResponse);
