@@ -138,7 +138,7 @@ export const login = (body) => {
   };
 };
 
-export const token = () => {
+export const token = (update) => {
   return (dispatch) => {
     dispatch(refreshTokenRequest());
     refreshToken()
@@ -147,6 +147,7 @@ export const token = () => {
           dispatch(refreshTokenSuccess());
           setCookie("accessToken", res.accessToken.split("Bearer ")[1]);
           setCookie("refreshToken", res.refreshToken);
+          dispatch(update);
         }
       })
       .catch((e) => {
@@ -179,9 +180,10 @@ export const getUserData = () => {
         }
       })
       .catch((e) => {
+        if (e.message === "jwt expired" || "jwt malformed") {
+          dispatch(token(getUserData()));
+        }
         dispatch(getUserFailed());
-        dispatch(token());
-        dispatch(getUserData());
       });
   };
 };
@@ -196,9 +198,10 @@ export const updateUser = (body) => {
         }
       })
       .catch((e) => {
+        if (e.message === "jwt expired" || "jwt malformed") {
+          dispatch(token(updateUser()));
+        }
         dispatch(patchUserFailed());
-        dispatch(token());
-        dispatch(updateUser());
       });
   };
 };

@@ -20,11 +20,13 @@ export const postOrder = (body) => {
           });
         }
       }).catch((e) => {
+        if (e.message === "jwt expired" || "jwt malformed") {
+          dispatch(token(postOrder()));
+        }
         dispatch({
           type: POST_ORDER_FAILED
         });
-        dispatch(token());
-        dispatch(postOrder())
+        
       })
     };
   
