@@ -1,0 +1,22 @@
+.container {
+    margin: 0 auto;
+    max-width: calc(100% - 10%)
+}
+
+.block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin: 0 auto;
+}
+
+
+.text-shadow {
+    text-shadow: #3333ff80 0 0 20px;
+}
+
+.order__status {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+}

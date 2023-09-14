@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 const Header = () => {
   const { isLogin } = useSelector((store) => store.user);
-
+  const data = useSelector((store) => store.ws)
   const link = isLogin ? "/profile" : "/login";
   return (
     <header className={header.header}>
@@ -31,7 +31,7 @@ const Header = () => {
         </li>
         <li className={header.header__menu_item}>
           <NavLink
-            to='/order'
+            to='/feed'
             className={({ isActive, isPending }) =>
               isActive
                 ? `${header["header__link-active"]} link_active link text text_type_main-default pl-5 pr-5 pt-4 pb-4`

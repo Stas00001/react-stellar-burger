@@ -4,7 +4,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
 const IngredientsCategoriesItem = ({ data, onClickCard }) => {
   const { _id } = data;

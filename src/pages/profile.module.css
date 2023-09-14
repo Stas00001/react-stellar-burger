@@ -4,6 +4,8 @@
     justify-content: center;
     align-items: center;
     height: 90vh;
+    max-width: calc(100% - 20%);
+    margin: 0 auto;
 }
 
 .form__container {

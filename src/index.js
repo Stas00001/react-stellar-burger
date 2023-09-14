@@ -3,24 +3,33 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/app/app";
 import reportWebVitals from "./reportWebVitals";
-import { compose, createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
+import { compose, createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
 import { rootReducer } from "./services/reducers";
+import { socketMiddleware } from "./services/middleware/socketMiddleware";
+import { wsActions, wsAuthActions } from "./services/actions/ws-action";
+const wsUrl = "wss://norma.nomoreparties.space";
 
 const composeEnhancers =
-  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-const enhancer = composeEnhancers(applyMiddleware(thunk));
+const enhancers = composeEnhancers(
+  applyMiddleware(
+    thunk,
+    socketMiddleware(`${wsUrl}/orders`, wsAuthActions, true),
+    socketMiddleware(`${wsUrl}/orders/all`, wsActions, false)
+  )
+);
 
-const store = createStore(rootReducer, enhancer);
+const store = createStore(rootReducer, enhancers);
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-    <App />
+      <App />
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
