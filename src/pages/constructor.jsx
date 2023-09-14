@@ -13,10 +13,7 @@ function Constructor() {
   const { itemsRequest, itemsFailed, success } = useSelector(
     (store) => store.ingredients
   );
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getItems());
-  }, [dispatch]);
+  
   return (
     <div className={styles.app}>
       {itemsRequest && (

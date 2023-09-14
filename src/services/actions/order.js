@@ -1,4 +1,5 @@
 import { postIngredients } from "../../utils/api";
+import { token } from "./user";
 export const POST_ORDER = 'POST_ORDER'
 export const GET_INGREDIENTS = 'GET_INGREDIENTS';
 export const POST_ORDER_REQUEST = 'POST_ORDER_REQUEST';
@@ -17,11 +18,15 @@ export const postOrder = (body) => {
             type: POST_ORDER_SUCCESS,
             order: res
           });
-        } else {
-          dispatch({
-            type: POST_ORDER_FAILED
-          });
         }
+      }).catch((e) => {
+        if (e.message === "jwt expired" || "jwt malformed") {
+          dispatch(token(postOrder()));
+        }
+        dispatch({
+          type: POST_ORDER_FAILED
+        });
+        
       })
     };
   

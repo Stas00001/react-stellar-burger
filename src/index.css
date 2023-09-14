@@ -17,8 +17,9 @@ body {
   ;
 }
 
-.link_active {
-  color: var(--primary-light-color);
+
+.link_active svg {
+  fill: var(--primary-light-color);
 }
 
 .border {

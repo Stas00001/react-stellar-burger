@@ -10,9 +10,7 @@ import { useMemo } from 'react';
 import { GET_INGREDIENT } from "../../services/actions/ingredients-details";
 const BurgerIngredient = (props) => {
   const {items} = useSelector(store => store.ingredients)
-  const {ingredient, successModal} = useSelector(store => store.ingredientsDetails)
   const dispatch = useDispatch()
-  const [modal, setModal] = React.useState(false);
   const [current, setCurrent] = React.useState("one");
   const {arrTypeBun, arrTypeMain, arrTypeSauce } = useMemo(() => {
     return {
@@ -48,11 +46,8 @@ const BurgerIngredient = (props) => {
       type: GET_INGREDIENT,
       item
     })
-    handleOpenModalIngredient();
   }
-  const handleOpenModalIngredient = () => {
-    setModal(true);
-  };
+
   const tabHandler = (ref) => {
     ref.current.scrollIntoView({ behavior: 'smooth'});
   };
@@ -123,13 +118,7 @@ const BurgerIngredient = (props) => {
           />
 
       </div>
-      <Modal active={modal} setActive={setModal}>
-        {successModal && (
-          <IngredientDetails
-            data={ingredient}
-          />
-        )}
-      </Modal>
+  
     </div>
   );
 };
