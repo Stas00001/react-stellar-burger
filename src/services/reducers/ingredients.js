@@ -62,7 +62,7 @@ export const ingredientsReducer = (state = initialState, action) => {
     case ADD_INGREDIENTS: {
       return {
         ...state,
-        ingredients: [...state.ingredients, action.item],
+        ingredients: [...state.ingredients, action.payload],
       };
     }
     case ADD_BUN: {

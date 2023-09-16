@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 const IngredientId = () => {
   const { items } = useSelector((store) => store.ingredients);
   const { ingredientId } = useParams();
+
   const ingredient = items.find((item) => item._id === ingredientId);
   return (
     <div className={`${style.ingredient}`}>

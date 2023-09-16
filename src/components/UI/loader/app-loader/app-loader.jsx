@@ -8,14 +8,15 @@ import ResetPassword from "../../../../pages/reset-password";
 import Order from "../../../../pages/order";
 import ProfileForm from "../../../profile-form/profile-form";
 import Feed from "../../../../pages/feed";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import ProtectedRouteElement from "../../../protected-route-element/protected-route-element";
 import IngredientId from "../../../../pages/ingredients-id";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
-import Modal from "../../../modal/modal";
-import { useSelector, useDispatch } from "react-redux";
-import React, { useState } from "react";
-import { CLEAR_INGREDIENT } from "../../../../services/actions/ingredients-details";
+import { useSelector } from "react-redux";ß
 import ProfileOrder from "../../../profile-order/profile-order";
 import {
   WS_CONNECTION_CLOSED,
@@ -24,31 +25,12 @@ import {
   WS_AUTH_CONNECTION_START,
 } from "../../../../services/actions/ws-action";
 const AppLoader = () => {
-  const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
   const { orders } = useSelector((store) => store.ws);
   const ordersAuth = useSelector((store) => store.wsAuth.orders);
   const background = location.state && location.state.background;
-  const { ingredient, successModal } = useSelector(
-    (store) => store.ingredientsDetails
-  );
-  const [active, setActive] = useState(false);
-  React.useEffect(() => {
-    if (ingredient) {
-      setActive(true);
-    }
-  }, [ingredient]);
+  const { items } = useSelector((store) => store.ingredients);
 
-  const handleModalClose = () => {
-    setTimeout(() => {
-      dispatch({
-        type: CLEAR_INGREDIENT,
-      });
-      navigate(-1);
-    }, 600);
-    setActive(false);
-  };
   return (
     <>
       <Routes location={background || location}>
@@ -113,24 +95,15 @@ const AppLoader = () => {
         ></Route>
         <Route path="*" element={<Error />}></Route>
         <Route path="/ingredients/:ingredientId" element={<IngredientId />} />
-        <Route
-          path="/feed"
-          element={
-            <ProtectedRouteElement login={false}>
-              <Feed path={"/feed"} />
-            </ProtectedRouteElement>
-          }
-        ></Route>
+        <Route path="/feed" element={<Feed path={"/feed"} />}></Route>
         <Route
           path="/feed/:id"
           element={
-            <ProtectedRouteElement login={false}>
-              <Order
-                wsStart={WS_CONNECTION_START}
-                wsClose={WS_CONNECTION_CLOSED}
-                data={orders}
-              />
-            </ProtectedRouteElement>
+            <Order
+              wsStart={WS_CONNECTION_START}
+              wsClose={WS_CONNECTION_CLOSED}
+              data={orders}
+            />
           }
         ></Route>
       </Routes>
@@ -139,15 +112,7 @@ const AppLoader = () => {
         <Routes>
           <Route
             path="/ingredients/:ingredientId"
-            element={
-              <Modal
-                active={active}
-                setActive={setActive}
-                handleModalClose={handleModalClose}
-              >
-                {successModal && <IngredientDetails data={ingredient} />}
-              </Modal>
-            }
+            element={<IngredientDetails data={items} />}
           />
         </Routes>
       )}

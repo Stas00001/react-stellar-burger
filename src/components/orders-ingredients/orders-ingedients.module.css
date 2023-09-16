@@ -16,7 +16,7 @@
     object-fit: cover;
 }
 
-.container:nth-child(n+2) {
+.container:nth-child(n+1) {
     margin-left: -15px;
 }
 

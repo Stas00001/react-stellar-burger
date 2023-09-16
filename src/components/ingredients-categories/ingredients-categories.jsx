@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { ingredientPropType } from "../../utils/prop-types";
 import IngredientsCategoriesItem from "../ingredients-categories-item/ingredients-categories-item";
 const IngredientsCategories = (props) => {
-  
   return (
     <>
     <h3 ref={props.refBun} className="text text_type_main-medium pb-6">
@@ -11,7 +10,7 @@ const IngredientsCategories = (props) => {
     </h3>
     <div  className={`${ingredientsCategoriesStyle.card} pr-4 pl-4`}>
       {props.data.map((data, index) => (
-        <IngredientsCategoriesItem key={index} onClickCard ={props.onClickCard} data = {data}/>
+        <IngredientsCategoriesItem key={index}  data = {data}/>
       ))}
     </div>
     </>
@@ -20,7 +19,6 @@ const IngredientsCategories = (props) => {
 
 IngredientsCategories.propTypes = {
   data: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
-  onClickCard: PropTypes.func.isRequired
 };
 
 export default IngredientsCategories;

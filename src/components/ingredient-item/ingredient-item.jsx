@@ -86,10 +86,9 @@ const IngredientItem = ({ item, moveElement, index, id, keys }) => {
 };
 
 IngredientItem.propTypes = {
-  item: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
   moveElement: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   keys: PropTypes.string.isRequired
 };
 export default IngredientItem;

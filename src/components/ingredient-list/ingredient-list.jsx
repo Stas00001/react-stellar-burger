@@ -5,7 +5,9 @@ import IngredientItem from "../ingredient-item/ingredient-item";
 import { useDispatch, useSelector } from "react-redux";
 import { changeIngredients } from "../../services/actions/ingredients";
 import { useCallback } from "react";
-const IngredientList = (props) => {
+import { v4 as uuidv4 } from "uuid";
+
+const IngredientList = () => {
   const dispatch = useDispatch();
   const { ingredients } = useSelector((store) => store.ingredients);
   const moveElement = (dragIndex, hoverIndex) => {
@@ -17,7 +19,7 @@ const IngredientList = (props) => {
         <IngredientItem
           moveElement={moveElement}
           index={index}
-          key={index}
+          key={uuidv4()}
           item={item}
           id={item._id}
           keys={item.key}

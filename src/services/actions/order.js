@@ -9,7 +9,7 @@ export const CLEAR_ORDER = 'CLEAR_ORDER'
 export const postOrder = (body) => {
     return (dispatch) => {
       dispatch({
-        type: POST_ORDER
+        type: POST_ORDER_REQUEST
       });
       postIngredients(body)
       .then(res => {
