@@ -5,7 +5,12 @@
     border: 3px dashed royalblue;
     animation: rotate 1s infinite linear;
 }
-
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
 @keyframes rotate {
     from {
         transform: rotate(0deg);

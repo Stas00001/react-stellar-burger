@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import style from "./order.module.css";
 import OrdersIngredients from "../orders-ingredients/orders-ingedients";
 
-const OrderInfo = ({ data }) => {
+const OrderInfo = ({ data, modal }) => {
   const { id } = useParams();
   const { items } = useSelector((store) => store.ingredients);
   const orderData = data.find((item) => item._id === id);
@@ -24,8 +24,8 @@ const OrderInfo = ({ data }) => {
     return orderData.ingredients.indexOf(item) === index;
   });
   return (
-    <div className={`${style.container} mb-10`}>
-      <p className={`${style} text text_type_digits-default mb-10 mt-20`}>#{orderData.number}</p>
+    <div className={ modal ? `${style.modal}` : `${style.container} mb-10`}>
+      <p className={`${style} text text_type_digits-default mb-10`}>#{orderData.number}</p>
       <p className={`${style} text text_type_main-medium mb-3`}>{orderData.name}</p>
       {orderData.status === "pending" && (
         <p className={`${style.status} text text_type_main-medium mb-6`}> Готовиться</p>

@@ -1,6 +1,9 @@
 .container {
     margin: 0 auto;
-    max-width: calc(100% - 10%)
+    max-width: calc(100% - 10%);
+    display: flex;
+    flex-direction: column;
+    justify-self: center
 }
 
 .block {

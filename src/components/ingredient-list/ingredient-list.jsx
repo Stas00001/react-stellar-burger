@@ -1,10 +1,8 @@
 import style from "./ingredient-list.module.css";
-import PropTypes from "prop-types";
-import { ingredientPropType } from "../../utils/prop-types";
 import IngredientItem from "../ingredient-item/ingredient-item";
 import { useDispatch, useSelector } from "react-redux";
 import { changeIngredients } from "../../services/actions/ingredients";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const IngredientList = () => {
@@ -19,7 +17,7 @@ const IngredientList = () => {
         <IngredientItem
           moveElement={moveElement}
           index={index}
-          key={uuidv4()}
+          key={item.key}
           item={item}
           id={item._id}
           keys={item.key}
@@ -29,9 +27,9 @@ const IngredientList = () => {
     [ingredients]
   );
   return (
-    <ul className={style.constructor__list}>
-      {ingredients.map((item, index) => renderElement(item, index))}
-    </ul>
+    <ul className={`${style.constructor__list} custom-scroll  mt-3 mb-3`}>
+    {ingredients.map((item, index) => renderElement(item, index))}
+  </ul>
   );
 };
 

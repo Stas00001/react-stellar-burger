@@ -45,7 +45,7 @@ const Header = () => {
           </NavLink>
         </li>
       </ul>
-      <Logo />
+      <NavLink to='/' className='link'> <Logo /> </NavLink> 
       <NavLink
         to='/profile'
         className={({ isActive, isPending }) =>

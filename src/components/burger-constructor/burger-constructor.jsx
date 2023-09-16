@@ -72,7 +72,7 @@ const BurgerConstructor = () => {
         }
       }, {});
   };
-  const [{ isHover }, dropTarget] = useDrop({
+  const [{ isHover, isDrop }, dropTarget] = useDrop({
     accept: "ingredients",
     drop(itemId) {
       addItem(itemId);
@@ -117,7 +117,7 @@ const BurgerConstructor = () => {
     >
       {bun && (
         <ConstructorElement
-          extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
+          extraClass={`${BurgerConstructorStyle.constructor__item}  mr-4`}
           type="top"
           isLocked={true}
           price={bun.price}
@@ -125,14 +125,10 @@ const BurgerConstructor = () => {
           thumbnail={bun.image}
         />
       )}
-      <div
-        className={`${BurgerConstructorStyle.constructor__container} custom-scroll  mt-3 mb-3`}
-      >
         <IngredientList />
-      </div>
       {bun && (
         <ConstructorElement
-          extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
+          extraClass={`${BurgerConstructorStyle.constructor__item}  mr-4`}
           type="bottom"
           isLocked={true}
           price={bun.price}

@@ -8,16 +8,15 @@ import ResetPassword from "../../../../pages/reset-password";
 import Order from "../../../../pages/order";
 import ProfileForm from "../../../profile-form/profile-form";
 import Feed from "../../../../pages/feed";
-import {
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ProtectedRouteElement from "../../../protected-route-element/protected-route-element";
 import IngredientId from "../../../../pages/ingredients-id";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileOrder from "../../../profile-order/profile-order";
+import Modal from "../../../modal/modal";
+import { CLEAR_INGREDIENT } from "../../../../services/actions/ingredients-details";
+import OrderInfo from "../../../order-info/order-info";
 import {
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_START,
@@ -26,10 +25,23 @@ import {
 } from "../../../../services/actions/ws-action";
 const AppLoader = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const { orders } = useSelector((store) => store.ws);
   const ordersAuth = useSelector((store) => store.wsAuth.orders);
   const background = location.state && location.state.background;
   const { items } = useSelector((store) => store.ingredients);
+  const navigate = useNavigate();
+  const handleModalClosePopupIngredient = () => {
+    dispatch({
+      type: CLEAR_INGREDIENT,
+    });
+    navigate(-1);
+  };
+
+  const handleModalClose = () => {
+    navigate(-1);
+  };
 
   return (
     <>
@@ -100,6 +112,7 @@ const AppLoader = () => {
           path="/feed/:id"
           element={
             <Order
+              modal={false}
               wsStart={WS_CONNECTION_START}
               wsClose={WS_CONNECTION_CLOSED}
               data={orders}
@@ -112,8 +125,50 @@ const AppLoader = () => {
         <Routes>
           <Route
             path="/ingredients/:ingredientId"
-            element={<IngredientDetails data={items} />}
+            element={
+              <Modal
+                active={true}
+                handleModalClose={handleModalClosePopupIngredient}
+              >
+                <IngredientDetails data={items} />{" "}
+              </Modal>
+            }
           />
+        </Routes>
+      )}
+      {background && (
+        <Routes>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal active={true} handleModalClose={handleModalClose}>
+                <Order
+                  wsStart={WS_CONNECTION_START}
+                  wsClose={WS_CONNECTION_CLOSED}
+                  data={orders}
+                  modal={true}
+                />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {background  && (
+        <Routes>
+          {" "}
+          <Route
+            path="/profile/order/:id"
+            element={
+              <Modal active={true} handleModalClose={handleModalClose}>
+                <Order
+                  wsStart={WS_AUTH_CONNECTION_START}
+                  wsClose={WS_AUTH_CONNECTION_CLOSED}
+                  data={ordersAuth}
+                  modal={true}
+                />{" "}
+              </Modal>
+            }
+          />{" "}
         </Routes>
       )}
     </>

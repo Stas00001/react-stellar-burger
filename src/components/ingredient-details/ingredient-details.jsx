@@ -8,11 +8,11 @@ import {
   GET_INGREDIENT,
 } from "../../services/actions/ingredients-details";
 import Modal from "../modal/modal";
+import PropTypes from 'prop-types';
 const IngredientDetails = ({ data }) => {
   const { ingredientId } = useParams();
   const navigate = useNavigate();
   const ingredient = data.find((item) => item._id === ingredientId);
-  console.log(ingredient);
   const isMoladIngedient = Boolean(ingredientId);
   const handleModalClose = () => {
     dispatch({
@@ -30,7 +30,6 @@ const IngredientDetails = ({ data }) => {
   return (
     <>
       {ingredient && (
-        <Modal active={isMoladIngedient} handleModalClose={handleModalClose}>
           <div className={`${popupStyle.popup__ingredient}`}>
             <p className={`text text_type_main-large`}>Детали ингредиента</p>
             <img
@@ -94,13 +93,12 @@ const IngredientDetails = ({ data }) => {
               </li>
             </ul>
           </div>
-        </Modal>
       )}
     </>
   );
 };
 IngredientDetails.propTypes = {
-  data: ingredientPropType.isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default IngredientDetails;

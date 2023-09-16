@@ -10,7 +10,7 @@ const IngredientsCategories = (props) => {
     </h3>
     <div  className={`${ingredientsCategoriesStyle.card} pr-4 pl-4`}>
       {props.data.map((data, index) => (
-        <IngredientsCategoriesItem key={index}  data = {data}/>
+        <IngredientsCategoriesItem key={data._id}  data = {data}/>
       ))}
     </div>
     </>
