@@ -16,7 +16,7 @@ import {
 import ProtectedRouteElement from "../../../protected-route-element/protected-route-element";
 import IngredientId from "../../../../pages/ingredients-id";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
-import { useSelector } from "react-redux";ß
+import { useSelector } from "react-redux";
 import ProfileOrder from "../../../profile-order/profile-order";
 import {
   WS_CONNECTION_CLOSED,
