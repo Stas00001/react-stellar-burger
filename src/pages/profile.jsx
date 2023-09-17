@@ -3,6 +3,7 @@ import NavProfile from "../components/nav-profile/nav-profile";
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { getCookie } from "../utils/cooke";
 const Profile = () => {
   const { user } = useSelector(
     (store) => store.user
@@ -18,10 +19,6 @@ const Profile = () => {
 
     }
   }, [location])
-
-  if (Object.keys(user).length === 0) {
-    return <Navigate to="/login" />;
-  }
   const text = currentLocation === 'profile' ? 'В этом разделе вы можете изменить свои персональные данные' : 'В этом разделе вы можете просмотреть свою историю заказов'
   return (
     <div className={style.container}>

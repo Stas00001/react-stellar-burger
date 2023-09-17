@@ -153,22 +153,21 @@ const AppLoader = () => {
           />
         </Routes>
       )}
-      {background  && (
-        <Routes>
-          {" "}
+      {background && (
+        <Routes >
           <Route
             path="/profile/order/:id"
             element={
-              <Modal active={true} handleModalClose={handleModalClose}>
-                <Order
-                  wsStart={WS_AUTH_CONNECTION_START}
-                  wsClose={WS_AUTH_CONNECTION_CLOSED}
-                  data={ordersAuth}
-                  modal={true}
-                />{" "}
-              </Modal>
+                <Modal active={true} handleModalClose={handleModalClose}>
+                  <Order
+                    wsStart={WS_AUTH_CONNECTION_START}
+                    wsClose={WS_AUTH_CONNECTION_CLOSED}
+                    data={ordersAuth}
+                    modal={true}
+                  />
+                </Modal>
             }
-          />{" "}
+          />
         </Routes>
       )}
     </>
