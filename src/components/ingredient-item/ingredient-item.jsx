@@ -59,7 +59,7 @@ const IngredientItem = ({ item, moveElement, index, id, keys }) => {
       return { id, index };
     },
     collect: (monitor) => ({
-      isDrag: monitor.isDragging() ? 'is-drag' :  '',
+      isDrag: monitor.isDragging() ? 'is-drag' :  'no-drag',
     }),
   });
   drag(drop(ref));

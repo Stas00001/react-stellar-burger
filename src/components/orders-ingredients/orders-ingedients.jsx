@@ -9,7 +9,7 @@ const OrdersIngredients = ({ id, counter }) => {
     navigate(`/ingredients/${id}`);
   };
   return (
-    <div onClick={onClick} className={`${style.link} link`}>
+    <div className={`${style.link} `}>
       <div className={style.container}>
         <img
           className={style.image}

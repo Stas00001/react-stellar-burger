@@ -60,19 +60,20 @@ const AppLoader = () => {
             path="/profile/order"
             element={<ProfileOrder path={"/profile/order"} />}
           />
+          <Route
+            path="/profile/order/:id"
+            element={
+              <ProtectedRouteElement login={false}>
+                <Order
+                  data={ordersAuth}
+                  wsStart={WS_AUTH_CONNECTION_START}
+                  wsClose={WS_AUTH_CONNECTION_CLOSED}
+                />
+              </ProtectedRouteElement>
+            }
+          />
         </Route>
-        <Route
-          path="/profile/order/:id"
-          element={
-            <ProtectedRouteElement login={false}>
-              <Order
-                data={ordersAuth}
-                wsStart={WS_AUTH_CONNECTION_START}
-                wsClose={WS_AUTH_CONNECTION_CLOSED}
-              />
-            </ProtectedRouteElement>
-          }
-        />
+
         <Route
           path="/login"
           element={
@@ -136,36 +137,26 @@ const AppLoader = () => {
           />
         </Routes>
       )}
-      {background && (
+      {background && orders && (
         <Routes>
           <Route
             path="/feed/:id"
             element={
               <Modal active={true} handleModalClose={handleModalClose}>
-                <Order
-                  wsStart={WS_CONNECTION_START}
-                  wsClose={WS_CONNECTION_CLOSED}
-                  data={orders}
-                  modal={true}
-                />
+                <OrderInfo data={orders} modal={true} />
               </Modal>
             }
           />
         </Routes>
       )}
-      {background && (
-        <Routes >
+      {background && ordersAuth && (
+        <Routes>
           <Route
             path="/profile/order/:id"
             element={
-                <Modal active={true} handleModalClose={handleModalClose}>
-                  <Order
-                    wsStart={WS_AUTH_CONNECTION_START}
-                    wsClose={WS_AUTH_CONNECTION_CLOSED}
-                    data={ordersAuth}
-                    modal={true}
-                  />
-                </Modal>
+              <Modal active={true} handleModalClose={handleModalClose}>
+                <OrderInfo data={ordersAuth} modal={true} />
+              </Modal>
             }
           />
         </Routes>

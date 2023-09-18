@@ -1,7 +1,7 @@
 import style from './nav-profile.module.css'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { postLogout } from '../../utils/api'
-import { deleteCookie } from '../../utils/cooke'
+import { deleteCookie, getCookie } from '../../utils/cooke'
 import { resetUser } from '../../services/actions/user'
 import { useDispatch } from 'react-redux'
 const NavProfile = () => {
@@ -12,7 +12,14 @@ const NavProfile = () => {
       if(res && res.success) {
         deleteCookie('accessToken')
         deleteCookie('refreshToken')
+        console.log(        getCookie('accessToken')
+        )       
+        console.log(        getCookie('refreshToken')
+        )
         dispatch(resetUser())
+        return (
+          <Navigate to = '/'/>
+        )
       }
     }).catch(e => {
       console.log(e)

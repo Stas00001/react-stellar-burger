@@ -101,6 +101,7 @@ const BurgerConstructor = () => {
     }
     const orderIngredients = ingredients.map((item) => item._id);
     if (bun !== undefined) {
+      console.log(orderIngredients)
       orderIngredients.push(bun._id);
     }
     if (bun && ingredients.length > 0 && isLogin) {
