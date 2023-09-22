@@ -1,8 +1,25 @@
 import style from "./profile.module.css";
-import ProfileForm from "../components/profile-form/profile-form";
 import NavProfile from "../components/nav-profile/nav-profile";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getCookie } from "../utils/cooke";
 const Profile = () => {
+  const { user } = useSelector(
+    (store) => store.user
+  );
+  const [currentLocation, setCurrentLocation] = useState('profile')
+  const location = useLocation()
+  useEffect(() => {
+    if (location.pathname === '/profile') {
+    setCurrentLocation('profile')
+    }
+    if (location.pathname === '/profile/order'){
+      setCurrentLocation('orders')
+
+    }
+  }, [location])
+  const text = currentLocation === 'profile' ? 'В этом разделе вы можете изменить свои персональные данные' : 'В этом разделе вы можете просмотреть свою историю заказов'
   return (
     <div className={style.container}>
       <div>
@@ -10,7 +27,7 @@ const Profile = () => {
         <p
           className={`${style.nav__text} text text_type_main-small text_color_inactive`}
         >
-          В этом разделе вы можете изменить свои персональные данные{" "}
+        {text}{" "}
         </p>
       </div>
       <Outlet />

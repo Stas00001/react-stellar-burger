@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import "./modal.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import style from './modal.module.css'
 import { CLEAR_INGREDIENT } from "../../services/actions/ingredients-details";
 const modalRoot = document.getElementById("react-modals");
 
@@ -23,13 +23,13 @@ const Modal = (props) => {
 
   return ReactDOM.createPortal(
     <>
-      <div className={active ? "modal active" : "modal"}>
+      <div className={active ? `${style.modal} ${style.active}` : `${style.modal}`}>
         <ModalOverlay onClose={handleModalClose} />
         <div
-          className={active ? "modal__body active" : "modal__body"}
+          className={active ? `${style[`modal__body`]} ${style.active}` : `${style[`modal__body`]}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <button onClick={handleModalClose} className={"modal__button-close"}>
+          <button onClick={handleModalClose} className={`${style[`modal__button-close`]}`}>
             <CloseIcon type="primary" />
           </button>
           {children}
@@ -43,7 +43,6 @@ const Modal = (props) => {
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
   active: PropTypes.bool.isRequired,
-  setActive: PropTypes.func.isRequired,
 };
 
 export default Modal;

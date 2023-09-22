@@ -37,15 +37,15 @@ export const getItems = () => {
   };
 };
 
-export const addIngredient = (ingredient) => {
-  const item = {
-    ...ingredient,
-    key: uuidv4()
-  }
+export const addIngredient = (item) => {
+ 
   return (dispatch) => {
     dispatch({
       type: ADD_INGREDIENTS,
-      item
+      payload: {
+        ...item,
+        key: uuidv4()    
+        }
     });
   };
 };

@@ -4,11 +4,11 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { useRef } from "react";
-import { ingredientPropType } from "../../utils/prop-types";
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from "react-dnd";
 import { DELETE_ITEM, DECREASE_ITEM } from "../../services/actions/ingredients";
 import { useDispatch } from "react-redux";
+import { DragPreviewImage } from "react-dnd";
 
 const IngredientItem = ({ item, moveElement, index, id, keys }) => {
   const dispatch = useDispatch();
@@ -53,43 +53,43 @@ const IngredientItem = ({ item, moveElement, index, id, keys }) => {
       keys,
     });
   };
-  const [{ isDrag }, drag] = useDrag({
+  const [{ isDrag }, drag, preview] = useDrag({
     type: "constructorElement",
     item: () => {
       return { id, index };
     },
     collect: (monitor) => ({
-      isDrag: monitor.isDragging(),
+      isDrag: monitor.isDragging() ? 'is-drag' :  'no-drag',
     }),
   });
   drag(drop(ref));
-  const opacity = isDrag ? 0 : 1;
   return (
+    <>
+    <DragPreviewImage connect={preview} src={item.image}/>
     <li
       ref={ref}
       className={`${style[`constructor__list-item`]}`}
-      style={{ opacity: opacity }}
     >
       <span className="pr-1">
         {" "}
         <DragIcon />
       </span>
       <ConstructorElement
-        extraClass={`mr-4`}
+        extraClass={`${isDrag} mr-4`}
         text={item.name}
         price={item.price}
         thumbnail={item.image}
         handleClose={onDelete}
       />
     </li>
+    </>
   );
 };
 
 IngredientItem.propTypes = {
-  item: PropTypes.arrayOf(ingredientPropType.isRequired).isRequired,
   moveElement: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   keys: PropTypes.string.isRequired
 };
 export default IngredientItem;

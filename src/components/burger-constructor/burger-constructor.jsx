@@ -16,9 +16,9 @@ import {
   addIngredient,
 } from "../../services/actions/ingredients";
 import { postOrder } from "../../services/actions/order";
+import LoaderText from "../UI/loader-text/loader-text";
 import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "../../utils/cooke";
@@ -27,6 +27,7 @@ const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const isLogin = getCookie("accessToken");
   const { items, ingredients, bun } = useSelector((store) => store.ingredients);
+  const { itemsRequest } = useSelector((store) => store.order);
   const totalPrice = useMemo(() => {
     return items.reduce((acc, item) => acc + item.price * item.__v, 0);
   }, [items]);
@@ -39,10 +40,6 @@ const BurgerConstructor = () => {
           ingredient,
         });
       } else {
-        const item = {
-          ...ingredient,
-          key: uuidv4(),
-        };
         dispatch(addIngredient(ingredient));
       }
       return {
@@ -75,7 +72,7 @@ const BurgerConstructor = () => {
         }
       }, {});
   };
-  const [{ isHover }, dropTarget] = useDrop({
+  const [{ isHover, isDrop }, dropTarget] = useDrop({
     accept: "ingredients",
     drop(itemId) {
       addItem(itemId);
@@ -104,6 +101,7 @@ const BurgerConstructor = () => {
     }
     const orderIngredients = ingredients.map((item) => item._id);
     if (bun !== undefined) {
+      console.log(orderIngredients)
       orderIngredients.push(bun._id);
     }
     if (bun && ingredients.length > 0 && isLogin) {
@@ -120,7 +118,7 @@ const BurgerConstructor = () => {
     >
       {bun && (
         <ConstructorElement
-          extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
+          extraClass={`${BurgerConstructorStyle.constructor__item}  mr-4`}
           type="top"
           isLocked={true}
           price={bun.price}
@@ -128,14 +126,10 @@ const BurgerConstructor = () => {
           thumbnail={bun.image}
         />
       )}
-      <div
-        className={`${BurgerConstructorStyle.constructor__container} custom-scroll  mt-3 mb-3`}
-      >
         <IngredientList />
-      </div>
       {bun && (
         <ConstructorElement
-          extraClass={`${BurgerConstructorStyle.constructor__item} mr-4`}
+          extraClass={`${BurgerConstructorStyle.constructor__item}  mr-4`}
           type="bottom"
           isLocked={true}
           price={bun.price}
@@ -158,8 +152,9 @@ const BurgerConstructor = () => {
             htmlType="button"
             type="primary"
             size="large"
+            disabled={itemsRequest}
           >
-            Оформить заказ{" "}
+           {itemsRequest ? <LoaderText/> : 'Оформить заказ'} {" "}
           </Button>
           <ToastContainer theme="dark" />
         </div>

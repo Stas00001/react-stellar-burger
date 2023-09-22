@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ingredientsCategoriesStyle from "./ingredients-categories-item.module.css";
 import {
   Counter,
@@ -6,7 +7,7 @@ import {
 import { useDrag } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, Link } from "react-router-dom";
-const IngredientsCategoriesItem = ({ data, onClickCard }) => {
+const IngredientsCategoriesItem = ({ data }) => {
   const { _id } = data;
   const dispatch = useDispatch();
   const location = useLocation();
@@ -26,6 +27,7 @@ const IngredientsCategoriesItem = ({ data, onClickCard }) => {
     }
   };
 
+
   const count = isNull() ? false : true;
 
   return (
@@ -37,7 +39,6 @@ const IngredientsCategoriesItem = ({ data, onClickCard }) => {
     >
       <div
         ref={dragRef}
-        onClick={(e) => onClickCard(e)}
         id={data._id}
         className={`${ingredientsCategoriesStyle.card__item} pr-4 pl-4 pb-8`}
         type={data.type}

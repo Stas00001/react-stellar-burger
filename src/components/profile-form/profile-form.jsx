@@ -21,10 +21,6 @@ const ProfileForm = () => {
   });
   const [disabled, setDisabled] = React.useState(true);
   const dispatch = useDispatch();
-  const deepEqual = (obj1, obj2) => {
-     return JSON.stringify(obj1) === JSON.stringify(obj2);
-  };
-
   React.useEffect(() => {
     setValue({ ...values, email: user.email, name: user.name, password: "" });
 

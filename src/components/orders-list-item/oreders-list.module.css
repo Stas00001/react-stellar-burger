@@ -1,0 +1,57 @@
+.item {
+    background: #1c1c21;
+    list-style: none;
+    text-decoration: none;
+    color: #f2f2f3;
+    border-radius: 40px;
+    display: grid;
+    align-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-areas:
+        "number date"
+        "name name"
+        "status status"
+        "ingredients totalPrice";
+}
+
+.number {
+    grid-area: number;
+}
+.date {
+    grid-area: date;
+    justify-self: end;
+
+}
+.name {
+    grid-area: name;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0;
+    padding: 24px 0;
+}
+
+.status {
+    grid-area: status;
+    padding-bottom: 10px;
+}
+
+.ingredients {
+    grid-area: ingredients;
+    display: flex;
+    list-style: none;
+    padding: 0;
+
+}
+
+.price {
+    grid-area: totalPrice;
+    display: flex;
+    justify-self: end;
+    align-items: center;
+    gap: 10px;
+
+}
+

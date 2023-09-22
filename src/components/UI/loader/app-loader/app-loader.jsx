@@ -7,38 +7,42 @@ import ForgotPassword from "../../../../pages/forgot-password";
 import ResetPassword from "../../../../pages/reset-password";
 import Order from "../../../../pages/order";
 import ProfileForm from "../../../profile-form/profile-form";
+import Feed from "../../../../pages/feed";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import ProtectedRouteElement from "../../../protected-route-element/protected-route-element";
 import IngredientId from "../../../../pages/ingredients-id";
 import IngredientDetails from "../../../ingredient-details/ingredient-details";
+import { useDispatch, useSelector } from "react-redux";
+import ProfileOrder from "../../../profile-order/profile-order";
 import Modal from "../../../modal/modal";
-import { useSelector, useDispatch } from "react-redux";
-import React, { useState } from "react";
 import { CLEAR_INGREDIENT } from "../../../../services/actions/ingredients-details";
+import OrderInfo from "../../../order-info/order-info";
+import {
+  WS_CONNECTION_CLOSED,
+  WS_CONNECTION_START,
+  WS_AUTH_CONNECTION_CLOSED,
+  WS_AUTH_CONNECTION_START,
+} from "../../../../services/actions/ws-action";
 const AppLoader = () => {
-  const dispatch = useDispatch()
   const location = useLocation();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { orders } = useSelector((store) => store.ws);
+  const ordersAuth = useSelector((store) => store.wsAuth.orders);
   const background = location.state && location.state.background;
-  const {ingredient, successModal} = useSelector(store => store.ingredientsDetails)
-  const [active, setActive] = useState(false)
-  React.useEffect(() => {
-    if(ingredient) {
-      setActive(true)
-    }
-  }, [ingredient])
- 
-  const handleModalClose = () => {
-    setTimeout(() => {
-      dispatch({
-        type: CLEAR_INGREDIENT
-      })
-      navigate(-1);
-
-    }, 600)
-    setActive(false)
-
+  const { items } = useSelector((store) => store.ingredients);
+  const navigate = useNavigate();
+  const handleModalClosePopupIngredient = () => {
+    dispatch({
+      type: CLEAR_INGREDIENT,
+    });
+    navigate(-1);
   };
+
+  const handleModalClose = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <Routes location={background || location}>
@@ -52,8 +56,24 @@ const AppLoader = () => {
           }
         >
           <Route path="" element={<ProfileForm />} />
-          <Route path="/profile/order" element={<Order />} />
+          <Route
+            path="/profile/order"
+            element={<ProfileOrder path={"/profile/order"} />}
+          />
+          <Route
+            path="/profile/order/:id"
+            element={
+              <ProtectedRouteElement login={false}>
+                <Order
+                  data={ordersAuth}
+                  wsStart={WS_AUTH_CONNECTION_START}
+                  wsClose={WS_AUTH_CONNECTION_CLOSED}
+                />
+              </ProtectedRouteElement>
+            }
+          />
         </Route>
+
         <Route
           path="/login"
           element={
@@ -87,7 +107,19 @@ const AppLoader = () => {
           }
         ></Route>
         <Route path="*" element={<Error />}></Route>
-        <Route path="/ingredients/:ingredientId" element={<IngredientId/>} />
+        <Route path="/ingredients/:ingredientId" element={<IngredientId />} />
+        <Route path="/feed" element={<Feed path={"/feed"} />}></Route>
+        <Route
+          path="/feed/:id"
+          element={
+            <Order
+              modal={false}
+              wsStart={WS_CONNECTION_START}
+              wsClose={WS_CONNECTION_CLOSED}
+              data={orders}
+            />
+          }
+        ></Route>
       </Routes>
 
       {background && (
@@ -95,12 +127,35 @@ const AppLoader = () => {
           <Route
             path="/ingredients/:ingredientId"
             element={
-              <Modal active={active} setActive={setActive} handleModalClose={handleModalClose}>
-             {successModal && (
-          <IngredientDetails
-            data={ingredient}
+              <Modal
+                active={true}
+                handleModalClose={handleModalClosePopupIngredient}
+              >
+                <IngredientDetails data={items} />{" "}
+              </Modal>
+            }
           />
-        )}
+        </Routes>
+      )}
+      {background && orders && (
+        <Routes>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal active={true} handleModalClose={handleModalClose}>
+                <OrderInfo data={orders} modal={true} />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      {background && ordersAuth && (
+        <Routes>
+          <Route
+            path="/profile/order/:id"
+            element={
+              <Modal active={true} handleModalClose={handleModalClose}>
+                <OrderInfo data={ordersAuth} modal={true} />
               </Modal>
             }
           />

@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 20vh;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item {
+    padding-bottom: 8px;
+    padding-right: 8px;
+    margin: 0;
+}
+.item:last-child {
+    padding: 0;
+}
+
+.done {
+ color: #00CCCC;
+}

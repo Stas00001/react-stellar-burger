@@ -9,7 +9,6 @@ const OrderDetails = () => {
   const { order } = useSelector((store) => store.order);
   const isModalOrder = Boolean(order);
   const dispatch = useDispatch();
- 
   const close = () => {
       dispatch({
         type: CLEAR_ORDER,
