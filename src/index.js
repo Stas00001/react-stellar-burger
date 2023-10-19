@@ -24,7 +24,7 @@ const enhancers = composeEnhancers(
   )
 );
 
-const store = createStore(rootReducer, enhancers);
+export const store = createStore(rootReducer, enhancers);
 
 ReactDOM.render(
   <React.StrictMode>
