@@ -18,11 +18,9 @@ const OrderInfo: FC<TProps> = ({ data, modal }) => {
   const { id } = useParams();
   const { items } = useSelector((store) => store.ingredients);
   const orderData = data.find((item) => item._id === id);
-  const ingredients = orderData?.ingredients.map((item) =>
-    items.find((data) => data._id === item)
-  );
-  const totalPrice = ingredients?.reduce(
-    (acc, item: any): number => acc + item.price,
+  const ingredients = items.filter((item : TIngredient) => orderData?.ingredients.includes(item._id))
+  const totalPrice = ingredients.reduce(
+    (acc: number, item: TIngredient): number => acc + item.price,
     0
   );
   const counter = (id: string) => {

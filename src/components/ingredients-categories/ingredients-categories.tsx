@@ -8,12 +8,12 @@ import { FC, RefObject } from "react";
 type TProps = {
   title: string;
   data: Array<TIngredient>;
-  refBun?: RefObject<HTMLHeadingElement>;
+  refTab?: RefObject<HTMLHeadingElement>;
 }
 const IngredientsCategories : FC<TProps> = (props) => {
   return (
     <>
-    <h3 ref={props.refBun} className="text text_type_main-medium pb-6">
+    <h3 ref={props.refTab} className="text text_type_main-medium pb-6">
       {props.title}
     </h3>
     <div  className={`${ingredientsCategoriesStyle.card} pr-4 pl-4`}>

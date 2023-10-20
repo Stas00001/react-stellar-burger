@@ -28,12 +28,16 @@ const BurgerConstructor = () => {
   const isLogin = getCookie("accessToken");
   const { items, ingredients, bun } = useSelector((store) => store.ingredients);
   const { itemsRequest } = useSelector((store) => store.order);
-  const totalPrice  = useMemo(() => {
-    return items.reduce((acc: number, item: TIngredient) => acc + item.price * item.__v, 0);
-  }, [items]);
+  const totalPrice = useMemo<number>(() => {
+    let total = 0;
+    ingredients.reduce((acc, item: TIngredient) => total = acc + item.price, 0);
+    if (bun !==null) {
+      total = total + bun.price*2;
+    }
+    return total
+}, [ingredients, bun]) ;
   const addItem = (itemId : TIngredient) => {
-    const result = items.filter((item) => item._id === itemId._id);
-    const ingredientsResult = result.reduce((res, ingredient) => {
+    items.filter((item) => item._id === itemId._id).reduce((res, ingredient) => {
       if (ingredient.type === "bun") {
         dispatch({
           type: ADD_BUN,
@@ -57,7 +61,7 @@ const BurgerConstructor = () => {
   const increase = (itemId: TIngredient) => {
     items!
       .filter((item) => item._id === itemId._id)
-      .reduce((item: any) : any=> {
+      .forEach((item) => {
         if (item.type === "bun") {
           decrease();
           dispatch({

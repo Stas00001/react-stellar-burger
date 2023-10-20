@@ -10,11 +10,18 @@ import { useFormField } from "../utils/hook/useFormField";
 import { login } from "../services/actions/user";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "../types/hooks";
-
+type FormStateType = {
+  email: string;
+  password: string
+}
+const initialFormState: FormStateType = {
+  email: '',
+  password: ''
+}
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { values, onChange } = useFormField({ email: "", password: "" });
+  const { values, onChange } = useFormField<FormStateType>(initialFormState);
   const { user, loginFailed } = useSelector(
     (store) => store.user
   );

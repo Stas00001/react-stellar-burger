@@ -1,17 +1,93 @@
+import { TIngredient } from "../types/types";
 import { getCookie } from "./cooke";
 
+type TServerResponse<T> = {
+  success: boolean;
+} & T;
+
+type TRefreshResponse = TServerResponse<{
+  refreshToken: string;
+  accessToken: string;
+}>;
+type TForgotPasswordPostResponse = TServerResponse<{
+  message: string;
+}>;
+type TRegisterResponse = TServerResponse<{
+  refreshToken: string;
+  accessToken: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}>;
+type TResetPasswordResponse = TServerResponse<{
+  message: string;
+}>;
+type TPostIngredientResponse = TServerResponse<{
+  name: string;
+  order: {
+    createdAt: string;
+    ingredients: TIngredient[];
+    name: string;
+    number: number;
+    owner: {
+      name: string;
+      email: string;
+    };
+    price: number;
+    status: string;
+    updatedAt: string;
+    _id: string
+  }
+}>;
+type TLoginUserResponse = TServerResponse<{
+  refreshToken: string;
+  accessToken: string;
+  user: {
+    name: string;
+    email: string;
+  };
+  status: number
+}>;
+type TLogoutResponse = TServerResponse<{
+  message: string;
+}>
+type TIngredientsResponse = TServerResponse<{
+  data: TIngredient[];
+}>;
+
+type TGetUserResponse = TServerResponse<{
+  refreshToken: string;
+  accessToken: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}>
+
+type TPatchUserResponse = TServerResponse<{
+  refreshToken: string;
+  accessToken: string;
+  user: {
+    name: string;
+    email: string;
+  };
+}>
 const configApi = {
   baseUrl: "https://norma.nomoreparties.space/api",
 };
-const getResponse = (res: Response) => {
-  return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
+
+const getResponse = <T>(res: Response): Promise<T> => {
+  return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
 const getIngredients = () => {
-  return fetch(`${configApi.baseUrl}/ingredients`).then(getResponse);
+  return fetch(`${configApi.baseUrl}/ingredients`).then((res) =>
+    getResponse<TIngredientsResponse>(res)
+  );
 };
 
-const postIngredients = (body : Array<string>) => {
+const postIngredients = (body: Array<string>) => {
   return fetch(`${configApi.baseUrl}/orders`, {
     method: "POST",
     headers: {
@@ -19,25 +95,29 @@ const postIngredients = (body : Array<string>) => {
       Authorization: "Bearer " + getCookie("accessToken"),
     },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) => getResponse<TPostIngredientResponse>(res));
 };
 
-const registerUser = (body : {email: string, password: string, name: string}) => {
+const registerUser = (body: {
+  email: string;
+  password: string;
+  name: string;
+}) => {
   return fetch(`${configApi.baseUrl}/auth/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) => getResponse<TRegisterResponse>(res));
 };
 
-const loginUser = (body: {email: string, password: string}) => {
+const loginUser = (body: { email: string; password: string }) => {
   return fetch(`${configApi.baseUrl}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) => getResponse<TLoginUserResponse>(res));
 };
 
 const refreshToken = () => {
@@ -50,22 +130,22 @@ const refreshToken = () => {
     body: JSON.stringify({
       token: getCookie("refreshToken"),
     }),
-  }).then(getResponse);
+  }).then((res) => getResponse<TRefreshResponse>(res));
 };
-const forgotPasswordPost = (body: {email: string} ) => {
+const forgotPasswordPost = (body: { email: string }) => {
   return fetch(`${configApi.baseUrl}/password-reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) => getResponse<TForgotPasswordPostResponse>(res));
 };
 
-const resetPasswordPost = (body:{password: string, token: string}) => {
+const resetPasswordPost = (body: { password: string; token: string }) => {
   return fetch(`${configApi.baseUrl}/password-reset`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) => getResponse<TResetPasswordResponse>(res));
 };
 
 const getUser = () => {
@@ -75,10 +155,14 @@ const getUser = () => {
       "Content-Type": "application/json",
       Authorization: "Bearer " + getCookie("accessToken"),
     },
-  }).then(getResponse);
+  }).then((res) => getResponse<TGetUserResponse>(res));
 };
 
-const patchUser = (body : {email: string, name: string; password?: string}) => {
+const patchUser = (body: {
+  email: string;
+  name: string;
+  password?: string;
+}) => {
   return fetch(`${configApi.baseUrl}/auth/user`, {
     method: "PATCH",
     headers: {
@@ -86,7 +170,7 @@ const patchUser = (body : {email: string, name: string; password?: string}) => {
       Authorization: "Bearer " + getCookie("accessToken"),
     },
     body: JSON.stringify(body),
-  }).then(getResponse);
+  }).then((res) =>getResponse<TPatchUserResponse>(res));
 };
 
 const postLogout = () => {
@@ -98,7 +182,7 @@ const postLogout = () => {
     body: JSON.stringify({
       token: getCookie("refreshToken"),
     }),
-  }).then(getResponse);
+  }).then((res) => getResponse<TLogoutResponse>(res));
 };
 export {
   configApi,

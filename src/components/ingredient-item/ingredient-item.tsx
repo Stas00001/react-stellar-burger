@@ -4,15 +4,15 @@ import {
   DragIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import React, { FC, useRef } from "react";
-import PropTypes from 'prop-types';
 import { useDrag, useDrop } from "react-dnd";
 import { DELETE_ITEM, DECREASE_ITEM } from "../../services/actions/ingredients";
 import { useDispatch } from "react-redux";
 import { DragPreviewImage } from "react-dnd";
 import { TIngredient } from "../../types/types";
+import { Identifier } from "dnd-core";
 
 type TProps = {
-  item: any;
+  item: TIngredient;
   moveElement: (dragIndex: number, hoverIndex: number) => void;
   index: number;
   id: string;
@@ -23,9 +23,17 @@ type TProps = {
 const IngredientItem :FC<TProps> = ({ item, moveElement, index, id, keys }) => {
   const dispatch = useDispatch();
   const ref = useRef<HTMLLIElement | null>(null);
-  const [, drop] = useDrop({
+  const [{handlerId}, drop] = useDrop<{
+    ingredient: TIngredient;
+    index: number;
+  }, unknown,   { handlerId: Identifier | null } >({
     accept: "constructorElement",
-    hover: (item: any, monitor) => {
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover: (item, monitor) => {
       if (!ref.current) {
         return;
       }
@@ -38,7 +46,7 @@ const IngredientItem :FC<TProps> = ({ item, moveElement, index, id, keys }) => {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-       // @ts-ignore
+      if (!hoverBoundingRect || !clientOffset) return;
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {

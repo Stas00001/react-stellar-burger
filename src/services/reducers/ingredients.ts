@@ -17,7 +17,7 @@ import {
 
 type TInitialState = {
   items: Array<TIngredient> | [];
-  bun: TIngredient | null;
+  bun: TIngredient | null ;
   ingredients: Array<TIngredient> ;
   itemsRequest: boolean;
   itemsFailed: boolean;

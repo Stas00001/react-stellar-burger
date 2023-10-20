@@ -1,7 +1,8 @@
 import React from "react";
 
-export const useFormField = (initialValue: any) => {
-    const [values, setValue] = React.useState(initialValue);
+
+export const useFormField = <T>(initialValue: T) => {
+    const [values, setValue] = React.useState<T>(initialValue);
      
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
       const {value, name} = e.target

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, RefObject } from "react";
 import { useRef, useEffect, useState } from "react";
 import burgerIngredientsStyle from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -42,11 +42,11 @@ const BurgerIngredient : FC = () => {
       setCurrent("main");
   };
 
-  const tabHandler = (ref : any) => {
-    ref.current.scrollIntoView({ behavior: "smooth" });
+  const tabHandler = (ref : RefObject<HTMLHeadingElement>) => {
+    ref.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleClick = (ref : any) => {
+  const handleClick = (ref : RefObject<HTMLHeadingElement>) => {
     tabHandler(ref);
   };
 
@@ -91,19 +91,19 @@ const BurgerIngredient : FC = () => {
         onScroll={handlerScroll}
       >
         <IngredientsCategories
-          refBun={refBun}
+          refTab={refBun}
           title="Булки"
           data={arrTypeBun}
         />
 
         <IngredientsCategories
-          refBun={refSauce}
+          refTab={refSauce}
           title="Соусы"
           data={arrTypeSauce}
         />
 
         <IngredientsCategories
-          refBun={refMain}
+          refTab={refMain}
           title="Начинки"
           data={arrTypeMain}
         />

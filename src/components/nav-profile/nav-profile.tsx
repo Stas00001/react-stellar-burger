@@ -1,7 +1,7 @@
 import style from './nav-profile.module.css'
 import { NavLink, useNavigate, Navigate } from 'react-router-dom'
 import { postLogout } from '../../utils/api'
-import { deleteCookie } from '../../utils/cooke'
+import { deleteCookie, getCookie } from '../../utils/cooke'
 import { resetUser } from '../../services/actions/user'
 import { useDispatch } from '../../types/hooks'
 const NavProfile = () => {

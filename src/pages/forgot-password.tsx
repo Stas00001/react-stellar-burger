@@ -11,9 +11,15 @@ import { useFormField } from "../utils/hook/useFormField";
 import { forgotPassword } from "../services/actions/user";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "../types/hooks";
+type FormStateType = {
+  email: string;
+}
+const initialFormState: FormStateType = {
+  email: '',
+}
 const ForgotPassword = () => {
   const dispatch = useDispatch();
-  const {values, onChange} = useFormField({email: ''})
+  const {values, onChange} = useFormField<FormStateType>(initialFormState)
   const { forgotPasswordSuccess, forgotPasswordFailed } = useSelector((store) => store.user);
 
   const forgotPasswordSubmit =(e: React.FormEvent<HTMLFormElement>) => {

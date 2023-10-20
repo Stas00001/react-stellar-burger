@@ -10,15 +10,22 @@ import { register } from "../services/actions/user";
 import { useFormField } from "../utils/hook/useFormField";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "../types/hooks";
+type FormStateType = {
+  email: string;
+  password: string;
+  name: string;
+
+}
+const initialFormState: FormStateType = {
+  email: '',
+  password: '',
+  name: "",
+}
 const Register = () => {
   const { registerFailed } = useSelector((store) => store.user);
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  const { values, onChange } = useFormField({
-    email: "",
-    password: "",
-    name: "",
-  });
+  const { values, onChange } = useFormField<FormStateType>(initialFormState);
 
   const registerSubmit = (e:  React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

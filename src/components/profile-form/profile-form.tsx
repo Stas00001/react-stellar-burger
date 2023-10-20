@@ -10,14 +10,23 @@ import style from "./profile-form.module.css";
 import { updateUser } from "../../services/actions/user";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector, useDispatch } from "../../types/hooks";
+
+type FormStateType = {
+  email: string;
+  password: string;
+  name:string;
+
+}
+const initialFormState: FormStateType = {
+  email: '',
+  password: '',
+  name: "",
+
+}
 const ProfileForm: FC = () => {
   const { user, email, name } = useSelector((store) => store.user);
   const [activeButtons, setActiveButtons] = React.useState(false);
-  const { values, setValue, onChange } = useFormField({
-    email: "",
-    name: "",
-    password: "",
-  });
+  const { values, setValue, onChange } = useFormField<FormStateType>(initialFormState);
   const [disabled, setDisabled] = React.useState(true);
   const dispatch = useDispatch();
   React.useEffect(() => {

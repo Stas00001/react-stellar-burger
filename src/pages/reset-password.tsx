@@ -10,8 +10,18 @@ import { useSelector, useDispatch } from "../types/hooks";
 import { Navigate } from "react-router-dom";
 import { resetPassword } from "../services/actions/user";
 import { useFormField } from "../utils/hook/useFormField";
+type FormStateType = {
+  token: string;
+  password: string;
+
+}
+const initialFormState: FormStateType = {
+  token: "",
+  password: '',
+ 
+}
 const ResetPassword = () => {
-  const { values, onChange } = useFormField({ password: "", token: "" });
+  const { values, onChange } = useFormField<FormStateType>(initialFormState);
   const { forgotPasswordSuccess, postResetPasswordFailed } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const resetPasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
